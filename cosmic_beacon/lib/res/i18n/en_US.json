@@ -1,0 +1,19 @@
+{
+    "welcome-text": "Welcome to\nCosmic Beacon!",
+    "home-description": "Cosmic Beacon provides intriguing NASA facts about Near Earth Objects (NEO).",
+    "home-button": "Get started",
+    "neo-size": "Size: between %s and %s",
+    "neo-approach-date": "Close approach: %s",
+    "neo-hazardous": "Possibly hazardous: %b{Yes:No}",
+    "neo-alt-text": "This 3d model is purely illustrative and does not represent the actual size of the NEO or it's appearence.",
+    "date-picker": "Select a date and time",
+    "setup-start-text": "Let's get started.\nSelect a date and time.",
+    "setup-end-text": "Great! Now you can see the NEOs that will be close to Earth at that time. Tap on one to see more details.",
+    "neo-orbiting-body":"Orbiting: %s",
+    "neo-approach-dates-text": "Other known close approach dates:",
+    "distance": "Distance: ",
+    "kilometers": "%s kilometers",
+    "miles": "%s miles",
+    "astronomical": "%s astronomical units",
+    "lunar": "%s lunar distances"
+}

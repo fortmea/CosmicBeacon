@@ -1,0 +1,19 @@
+{
+    "welcome-text": "Bem vindo ao\nFarol Cósmico!",
+    "home-description": "O Farol Cósmico é um aplicativo que permite ver informações da NASA sobre objetos próximos à Terra.",
+    "home-button": "Começar",
+    "neo-size": "Tamanho: entre %s e %s",
+    "neo-approach-date": "Aproximação: %s",
+    "neo-hazardous": "Possívelmente perigoso: %b{Sim:Não}",
+    "neo-alt-text": "Esse modelo 3D não representa a verdadeira aparência ou tamanho do objeto.",
+    "date-picker": "Selecione uma data e hora",
+    "setup-start-text": "Vamos começar.\nEscolha uma data e hora.",
+    "setup-end-text": "Ótimo! Agora você pode ver informações sobre objetos próximos à Terra. Toque em um objeto para ver mais detalhes.",
+    "neo-orbiting-body": "Orbitando: %s",
+    "neo-approach-dates-text": "Outras datas de aproximação conhecidas:",
+    "distance": "Distância: ",
+    "kilometers": "%s quilômetros",
+    "miles": "%s milhas",
+    "astronomical": "%s unidades astronômicas",
+    "lunar": "%s distâncias lunares"
+}
