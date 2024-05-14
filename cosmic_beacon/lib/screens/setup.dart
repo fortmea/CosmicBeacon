@@ -2,7 +2,9 @@ import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
+import 'package:cosmic_beacon/screens/login.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
+import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/glass_date_picker.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ import 'package:cosmic_beacon/provider/date_provider.dart';
 import 'package:localization/localization.dart';
 
 class Setup extends ConsumerWidget {
-  Setup({super.key});
+  const Setup({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(selectedDateProvider);
@@ -69,8 +71,7 @@ class Setup extends ConsumerWidget {
                                       Navigator.of(context)
                                           .push(CustomPageRoute(NeoFull(
                                         asteroidData: nData[index],
-                                        isModelViewerVisible: true,
-                                        onTap: () {},
+                                        bookmarked: false,
                                       )));
                                     },
                                   ),
@@ -99,6 +100,26 @@ class Setup extends ConsumerWidget {
                       return Text(error.toString());
                     })
                   : const SizedBox(),
+              const SizedBox(height: 16),
+              selectedDate == null
+                  ? const SizedBox()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                            height: 50,
+                            width: 100,
+                            child: GlassButton(
+                                child: Text("next".i18n(),
+                                    style: const TextStyle(fontSize: 18)),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/login');
+                                }))
+                      ],
+                    ).animate().fade(
+                      curve: Curves.easeIn,
+                      duration: const Duration(milliseconds: 500)),
             ],
           ))),
     ]));

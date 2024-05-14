@@ -21,25 +21,34 @@ class ApproachDate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height,
-      width: width,
+        height: height,
+        width: width,
         child: GlassContainer(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-              DateFormat.yMd(Platform.localeName).add_jm().format(
-                  parseCustomDate(closeApproachData.closeApproachDateFull)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(children: [
+                  Text(
+                    textAlign: TextAlign.start,
+                    DateFormat.yMd(Platform.localeName).add_Hm().format(
+                        parseCustomDate(
+                            closeApproachData.closeApproachDateFull)),
+                  )
+                ]),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      "neo-orbiting-body"
+                          .i18n([closeApproachData.orbitingBody.i18n()]),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                )
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              "neo-orbiting-body".i18n([closeApproachData.orbitingBody]),
-              textAlign: TextAlign.start,
-            )
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }

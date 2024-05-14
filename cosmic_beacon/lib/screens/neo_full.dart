@@ -1,43 +1,78 @@
 import 'dart:io';
 
+import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
 import 'package:cosmic_beacon/extras/utils.dart';
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
+import 'package:cosmic_beacon/provider/bookmarked_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
+import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/widgets/approach_date.dart';
 import 'package:cosmic_beacon/widgets/cycling_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:intl/intl.dart';
 
-class NeoFull extends ConsumerWidget {
+class NeoFull extends ConsumerStatefulWidget {
   final AsteroidData asteroidData;
-  final bool isModelViewerVisible;
-  final void Function() onTap;
-  const NeoFull(
-      {Key? key,
-      required this.asteroidData,
-      required this.isModelViewerVisible,
-      required this.onTap})
-      : super(key: key);
+  var bookmarked;
+  NeoFull({
+    super.key,
+    required this.asteroidData,
+    this.bookmarked = false,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(neoDetailedDataProvider(asteroidData.id));
-    final distanceList = asteroidData.closeApproachDataList[0].missDistance
+  ConsumerState<NeoFull> createState() => _NeoFull();
+}
+
+@override
+class _NeoFull extends ConsumerState<NeoFull> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      ref.read(bookmarkedProvider.notifier).updateBookmarked(widget.bookmarked);
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = ref.watch(neoDetailedDataProvider(widget.asteroidData.id));
+    final bookmark = ref.watch(bookmarkedProvider);
+
+    final distanceList = widget
+        .asteroidData.closeApproachDataList[0].missDistance
         .toJson()
         .entries
         .toList();
 
     return Scaffold(
         appBar: AppBar(
+            actions: [
+              (FirebaseAuth.instance.currentUser != null)
+                  ? IconButton(
+                      icon: Icon(
+                          (bookmark) ? Icons.bookmark : Icons.bookmark_border),
+                      onPressed: () {
+                        Database(uid: FirebaseAuth.instance.currentUser!.uid)
+                            .addBookmark(widget.asteroidData.id);
+                        ref
+                            .read(bookmarkedProvider.notifier)
+                            .updateBookmarked(!widget.bookmarked);
+                      },
+                    )
+                  : const SizedBox()
+            ],
             title: Text(
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                asteroidData.name.split("(")[1].split(")")[0])),
+                widget.asteroidData.name.split("(")[1].split(")")[0])),
         body: Stack(children: [
           const ShootingStarsBackground(),
           Padding(
@@ -70,8 +105,8 @@ class NeoFull extends ConsumerWidget {
                         children: [
                           Text(
                             "neo-size".i18n([
-                              '${asteroidData.estimatedDiameterKm['min']!.toStringAsFixed(2)} km',
-                              '${asteroidData.estimatedDiameterKm['max']!.toStringAsFixed(2)} km'
+                              '${widget.asteroidData.estimatedDiameterKm['min']!.toStringAsFixed(2)} km',
+                              '${widget.asteroidData.estimatedDiameterKm['max']!.toStringAsFixed(2)} km'
                             ]),
                             style: const TextStyle(
                               fontSize: 14,
@@ -82,7 +117,8 @@ class NeoFull extends ConsumerWidget {
                             'neo-approach-date'.i18n([
                               DateFormat.yMd(Platform.localeName)
                                   .add_jm()
-                                  .format(parseCustomDate(asteroidData
+                                  .format(parseCustomDate(widget
+                                      .asteroidData
                                       .closeApproachDataList[0]
                                       .closeApproachDateFull))
                             ]),
@@ -92,8 +128,8 @@ class NeoFull extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'neo-hazardous'.i18n(
-                                [], [asteroidData.isPotentiallyHazardous]),
+                            'neo-hazardous'.i18n([],
+                                [widget.asteroidData.isPotentiallyHazardous]),
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -101,7 +137,9 @@ class NeoFull extends ConsumerWidget {
                           const SizedBox(height: 8),
                           Text(
                             'neo-orbiting-body'.i18n([
-                              asteroidData.closeApproachDataList[0].orbitingBody
+                              widget.asteroidData.closeApproachDataList[0]
+                                  .orbitingBody
+                                  .i18n()
                             ]),
                             style: const TextStyle(
                               fontSize: 14,
@@ -119,14 +157,14 @@ class NeoFull extends ConsumerWidget {
                                 ),
                               ),
                               FadingTextCycleWidget(
-                                duration: const Duration(seconds: 3),
+                                  duration: const Duration(seconds: 3),
                                   texts: distanceList.map((e) {
-                                return e.key.i18n([
-                                  NumberFormat.decimalPattern(
-                                          Platform.localeName)
-                                      .format(double.parse(e.value))
-                                ]);
-                              }).toList())
+                                    return e.key.i18n([
+                                      NumberFormat.decimalPattern(
+                                              Platform.localeName)
+                                          .format(double.parse(e.value))
+                                    ]);
+                                  }).toList())
                             ],
                           ),
                         ],
