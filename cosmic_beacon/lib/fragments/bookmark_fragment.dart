@@ -33,16 +33,19 @@ class BookmarkFragment extends ConsumerWidget {
                       child: ListView.builder(
                     itemBuilder: (context, index) {
                       final asteroidData = neoList[index];
-                      return Neo(
-                        asteroidData: asteroidData,
-                        onTap: () {
-                          Navigator.of(context).pushNamed('/neo_full',
-                              arguments: {
-                                'asteroidData': asteroidData,
-                                'bookmarked': true
-                              });
-                        },
-                        isModelViewerVisible: lista.length < 5,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Neo(
+                          asteroidData: asteroidData,
+                          onTap: () {
+                            Navigator.of(context).pushNamed('/neo_full',
+                                arguments: {
+                                  'asteroidData': asteroidData,
+                                  'bookmarked': true
+                                });
+                          },
+                          isModelViewerVisible: lista.length < 5,
+                        ),
                       );
                     },
                     itemCount: neoList.length,
