@@ -35,6 +35,7 @@ class _LoginState extends State<Login> {
 
       var userCred =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      //print(userCred.user!.uid);
       Database(uid: userCred.user!.uid).createUser();
       return userCred;
     }

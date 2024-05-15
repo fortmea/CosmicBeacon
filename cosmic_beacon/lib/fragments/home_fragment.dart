@@ -24,8 +24,10 @@ class HomeFragment extends ConsumerWidget {
     var lista = [];
     user.when(
       data: (data) {
-        final dados = data.data()! as Map<String, dynamic>;
-        lista = dados["bookmarked"] as List<dynamic>;
+        if (data.data() != null) {
+          final dados = data.data()! as Map<String, dynamic>;
+          lista = dados["bookmarked"] as List<dynamic>;
+        }
       },
       error: (error, stackTrace) {},
       loading: () {},
@@ -50,7 +52,6 @@ class HomeFragment extends ConsumerWidget {
         const SizedBox(height: 16),
         (selectedDate != null)
             ? provider.when(data: (data) {
-                //print(data);
                 final nData =
                     filterByDateApproximateDateAndTime(selectedDate, data);
                 return Expanded(
@@ -84,8 +85,6 @@ class HomeFragment extends ConsumerWidget {
                       duration: const Duration(milliseconds: 500)),
                 ]);
               }, error: (error, stack) {
-                print(error.toString());
-                print(stack.toString());
                 return Text(error.toString());
               })
             : const SizedBox(),

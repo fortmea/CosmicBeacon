@@ -1,5 +1,8 @@
 //Run with flutter run | Select-String -NotMatch "updateAcquireFence: Did not find frame." | Select-String -NotMatch "Dropping PlatformView Frame" | Select-String -NotMatch "app_time_stats" | Select-String -NotMatch "Empty SMPTE" | Select-String -NotMatch "Null anb" | Select-String -NotMatch "lockHardwareCanvas" | Select-String -NotMatch "Invalid first_paint"
 
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
@@ -14,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:localization/localization.dart';
@@ -35,6 +39,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final db = FirebaseFirestore.instance;
+  db.settings = const Settings(
+    persistenceEnabled: false,
+  );
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
@@ -42,11 +50,75 @@ void main() async {
   ));
   await remoteConfig.fetchAndActivate();
   apiKey.apiKey = remoteConfig.getString("api_key");
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(Phoenix(child: const ProviderScope(child: MyApp())));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription<DocumentSnapshot>? userSubscription;
+  Timer? periodicTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    startPeriodicCheck();
+  }
+
+  void listenToUserDataChanges() {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      return;
+    }
+
+    userSubscription?.cancel();
+
+    try {
+      userSubscription = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .snapshots()
+          .listen((DocumentSnapshot snapshot) {
+        final data = snapshot.exists;
+
+        if (!data) {
+          FirebaseAuth.instance.signOut();
+          // Close app
+          Phoenix.rebirth(context);
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void startPeriodicCheck() {
+    periodicTimer?.cancel(); // Ensure no multiple timers
+    periodicTimer = Timer.periodic(const Duration(seconds: 5), (t) {
+      try {
+        final userId = FirebaseAuth.instance.currentUser?.uid;
+        if (userId == null) {
+          userSubscription?.cancel();
+        } else {
+          listenToUserDataChanges();
+        }
+      } catch (e) {
+        print(e);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    periodicTimer?.cancel();
+    userSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +140,33 @@ class MyApp extends StatelessWidget {
                       bookmarked: args['bookmarked'],
                     ));
                   } else if (settings.name == '/setup') {
-                    return CustomPageRoute(const Setup());
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      // User is logged in, redirect them to home
+                      return CustomPageRoute(const Home());
+                    } else {
+                      return CustomPageRoute(const Setup());
+                    }
                   } else if (settings.name == '/login') {
-                    return CustomPageRoute(const Login());
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      // User is already logged in, redirect them to home
+                      return CustomPageRoute(const Home());
+                    } else {
+                      return CustomPageRoute(const Login());
+                    }
                   } else if (settings.name == '/') {
-                    return CustomPageRoute(const Start());
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      // User is logged in, redirect them to home
+                      return CustomPageRoute(const Home());
+                    } else {
+                      return CustomPageRoute(const Start());
+                    }
                   } else if (settings.name == '/home') {
-                    return CustomPageRoute(const Home());
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      return CustomPageRoute(const Home());
+                    } else {
+                      // User is not logged in, redirect them to login
+                      return CustomPageRoute(const Login());
+                    }
                   } else {
                     if (FirebaseAuth.instance.currentUser != null) {
                       return CustomPageRoute(const Home());

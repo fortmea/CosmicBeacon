@@ -5,6 +5,8 @@ class Database {
   Database({required this.uid});
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
+  final CollectionReference presenceCollection =
+      FirebaseFirestore.instance.collection('presence');
   Future updateUserData(List<String> ids) async {
     return await userCollection.doc(uid).update({
       'bookmarked': ids,
@@ -37,6 +39,9 @@ class Database {
   Future createUser() async {
     final userDoc = await userCollection.doc(uid).get();
     if (!userDoc.exists) {
+      await presenceCollection.doc(uid).set({
+        'isOnline': true,
+      });
       return await userCollection.doc(uid).set({
         'bookmarked': [],
       });

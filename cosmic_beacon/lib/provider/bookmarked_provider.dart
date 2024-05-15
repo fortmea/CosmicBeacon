@@ -7,7 +7,7 @@ final bookmarkedProvider =
 });
 
 class BookmarkedNotifier extends StateNotifier<bool> {
-  BookmarkedNotifier(bool initialState) : super(initialState);
+  BookmarkedNotifier(super.initialState);
 
   void updateBookmarked(bool marked) {
     state = marked;

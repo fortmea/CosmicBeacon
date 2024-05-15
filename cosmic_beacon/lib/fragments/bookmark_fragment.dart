@@ -7,8 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localization/localization.dart';
 
 class BookmarkFragment extends ConsumerWidget {
-  final void Function(String) onTap;
-  const BookmarkFragment(this.onTap, {super.key});
+  const BookmarkFragment({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,7 +43,7 @@ class BookmarkFragment extends ConsumerWidget {
                                   'bookmarked': true
                                 });
                           },
-                          isModelViewerVisible: lista.length < 5,
+                          isModelViewerVisible: false,
                         ),
                       );
                     },
@@ -55,7 +54,6 @@ class BookmarkFragment extends ConsumerWidget {
                 error: (error, stack) => Text('Error: $error'),
               );
             } else {
-              // Handle case where lista is empty
               return Text(
                 "bookmark-no-data-text".i18n(),
                 style: const TextStyle(fontSize: 24),

@@ -38,5 +38,14 @@
     "settings": "Settings",
     "bookmark-no-data-text": "You don't have any bookmarks yet.",
     "bookmark-error-text": "An error occurred while loading your bookmarks.",
-    "skip": "Skip to login."
+    "skip": "Skip to login.",
+    "settings-logout": "Log out",
+    "yes": "Yes",
+    "no": "No",
+    "confirmation": "Confirmation",
+    "logout-confirmation": "Are you sure you want to log out?",
+    "privacy-policy": "Privacy Policy",
+    "terms-of-service": "Terms of Service",
+    "error-open-url": "An error occurred while opening the URL.",
+    "app-version": "App version: %s"
 }

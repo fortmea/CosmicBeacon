@@ -33,6 +33,8 @@ class _NeoState extends State<Neo> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        
         onTap: widget.onTap,
         child: GlassContainer(
           child: Padding(
@@ -89,7 +91,9 @@ class _NeoState extends State<Neo> {
                               DateFormat.yMd(Platform.localeName)
                                   .add_jm()
                                   .format(parseCustomDate(widget
-                                      .asteroidData.closeApproachDataList[0].closeApproachDateFull))
+                                      .asteroidData
+                                      .closeApproachDataList[0]
+                                      .closeApproachDateFull))
                             ]),
                             style: const TextStyle(
                               fontSize: 14,

@@ -45,7 +45,6 @@ class _NeoFull extends ConsumerState<NeoFull> {
   Widget build(BuildContext context) {
     final provider = ref.watch(neoDetailedDataProvider(widget.asteroidData.id));
     final bookmark = ref.watch(bookmarkedProvider);
-
     final distanceList = widget
         .asteroidData.closeApproachDataList[0].missDistance
         .toJson()
@@ -64,7 +63,7 @@ class _NeoFull extends ConsumerState<NeoFull> {
                             .addBookmark(widget.asteroidData.id);
                         ref
                             .read(bookmarkedProvider.notifier)
-                            .updateBookmarked(!widget.bookmarked);
+                            .updateBookmarked(!bookmark);
                       },
                     )
                   : const SizedBox()
@@ -224,8 +223,6 @@ class _NeoFull extends ConsumerState<NeoFull> {
                     ))
                   ]);
                 }, error: (error, stack) {
-                  print(error.toString());
-                  print(stack.toString());
                   return Text(error.toString());
                 }, loading: () {
                   return const Center(child: CircularProgressIndicator());

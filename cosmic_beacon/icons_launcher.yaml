@@ -1,0 +1,5 @@
+icons_launcher:
+  image_path: "lib/res/img/icon.jpeg"
+  platforms:
+    android:
+      enable: true

@@ -38,5 +38,15 @@
     "settings": "Configurações",
     "bookmark-no-data-text": "Você ainda não tem favoritos.",
     "bookmark-error-text": "Erro ao carregar favoritos.",
-    "skip": "Pular para o login."
+    "skip": "Pular para o login.",
+    "settings-logout": "Sair",
+    "yes": "Sim",
+    "no": "Não",
+    "confirmation": "Confirmação",
+    "logout-confirmation": "Você tem certeza que deseja sair?",
+    "privacy-policy": "Política de Privacidade",
+    "terms-of-service": "Termos de Serviço",
+    "error-open-url": "Erro ao abrir URL.",
+    "app-version": "Versão do aplicativo: %s"
+
 }
