@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
+import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/screens/home.dart';
 import 'package:cosmic_beacon/screens/login.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:localization/localization.dart';
 import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -39,10 +41,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final db = FirebaseFirestore.instance;
-  db.settings = const Settings(
-    persistenceEnabled: false,
-  );
+
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
@@ -53,14 +52,14 @@ void main() async {
   runApp(Phoenix(child: const ProviderScope(child: MyApp())));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   StreamSubscription<DocumentSnapshot>? userSubscription;
   Timer? periodicTimer;
 
@@ -122,6 +121,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
     LocalJsonLocalization.delegate.directories = ['lib/res/i18n'];
     return ScreenUtilInit(
         designSize: const Size(440, 440),
@@ -132,6 +132,7 @@ class _MyAppState extends State<MyApp> {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
               child: MaterialApp(
+                locale: locale,
                 onGenerateRoute: (settings) {
                   if (settings.name == '/neo_full') {
                     final args = settings.arguments as Map<String, dynamic>;
@@ -141,21 +142,18 @@ class _MyAppState extends State<MyApp> {
                     ));
                   } else if (settings.name == '/setup') {
                     if (FirebaseAuth.instance.currentUser != null) {
-                      // User is logged in, redirect them to home
                       return CustomPageRoute(const Home());
                     } else {
                       return CustomPageRoute(const Setup());
                     }
                   } else if (settings.name == '/login') {
                     if (FirebaseAuth.instance.currentUser != null) {
-                      // User is already logged in, redirect them to home
                       return CustomPageRoute(const Home());
                     } else {
                       return CustomPageRoute(const Login());
                     }
                   } else if (settings.name == '/') {
                     if (FirebaseAuth.instance.currentUser != null) {
-                      // User is logged in, redirect them to home
                       return CustomPageRoute(const Home());
                     } else {
                       return CustomPageRoute(const Start());
@@ -164,7 +162,6 @@ class _MyAppState extends State<MyApp> {
                     if (FirebaseAuth.instance.currentUser != null) {
                       return CustomPageRoute(const Home());
                     } else {
-                      // User is not logged in, redirect them to login
                       return CustomPageRoute(const Login());
                     }
                   } else {

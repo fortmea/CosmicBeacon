@@ -1,11 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/fragments/bookmark_fragment.dart';
 import 'package:cosmic_beacon/fragments/home_fragment.dart';
 import 'package:cosmic_beacon/fragments/settings_fragment.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
+import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/provider/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:localization/localization.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -21,10 +22,27 @@ class _Home extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);
+
     final fragments = [
       const HomeFragment(),
       const BookmarkFragment(),
-      const SettingsFragment()
+      SettingsFragment(
+        (Locale locale) {
+          setState(() {
+            context.loaderOverlay.show();
+            ref.read(localeProvider.notifier).setLocale(locale);
+          });
+          Future.delayed(
+            const Duration(milliseconds: 1000),
+            () {
+              setState(() {
+                ref.read(localeProvider.notifier).setLocale(locale);
+                context.loaderOverlay.hide();
+              });
+            },
+          );
+        },
+      )
     ];
     return Scaffold(
       body: Stack(children: [
@@ -39,7 +57,7 @@ class _Home extends ConsumerState<Home> {
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.black.withOpacity(0.5),
         elevation: 10,
-        selectedIndex: selectedIndex!,
+        selectedIndex: selectedIndex,
         onDestinationSelected: (index) {
           ref.read(selectedIndexProvider.notifier).updateDate(index);
         },

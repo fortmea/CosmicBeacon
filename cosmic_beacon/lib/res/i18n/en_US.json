@@ -47,5 +47,8 @@
     "privacy-policy": "Privacy Policy",
     "terms-of-service": "Terms of Service",
     "error-open-url": "An error occurred while opening the URL.",
-    "app-version": "App version: %s"
+    "app-version": "App version: %s",
+    "set-language": "Change language",
+    "portuguese": "Portuguese",
+    "english": "English"
 }

@@ -1,4 +1,7 @@
+import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class CustomPageRoute<T> extends PageRoute<T> {
   CustomPageRoute(this.child);
@@ -15,7 +18,9 @@ class CustomPageRoute<T> extends PageRoute<T> {
       Animation<double> secondaryAnimation) {
     return FadeTransition(
       opacity: animation,
-      child: child,
+      child: LoaderOverlay(
+          overlayColor: Theme.of(context).scaffoldBackgroundColor,
+          child: child),
     );
   }
 

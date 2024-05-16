@@ -47,6 +47,8 @@
     "privacy-policy": "Política de Privacidade",
     "terms-of-service": "Termos de Serviço",
     "error-open-url": "Erro ao abrir URL.",
-    "app-version": "Versão do aplicativo: %s"
-
+    "app-version": "Versão do aplicativo: %s",
+    "set-language": "Mudar idioma",
+    "portuguese": "Português",
+    "english": "Inglês"
 }
