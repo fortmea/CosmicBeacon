@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'package:cosmic_beacon/widgets/cycling_text.dart';
+import 'package:universal_io/io.dart';
 
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,13 @@ class Neo extends StatefulWidget {
   final AsteroidData asteroidData;
   final bool isModelViewerVisible;
   final void Function() onTap;
+  final MeasurementUnits? preferedMeasurementUnit;
   const Neo(
       {Key? key,
       required this.asteroidData,
       required this.isModelViewerVisible,
-      required this.onTap})
+      required this.onTap,
+      this.preferedMeasurementUnit})
       : super(key: key);
 
   @override
@@ -32,9 +35,14 @@ class _NeoState extends State<Neo> {
 
   @override
   Widget build(BuildContext context) {
+    final distanceList = widget
+        .asteroidData.closeApproachDataList[0].missDistance
+        .toJson()
+        .entries
+        .toList();
+
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        
         onTap: widget.onTap,
         child: GlassContainer(
           child: Padding(
@@ -98,6 +106,44 @@ class _NeoState extends State<Neo> {
                             style: const TextStyle(
                               fontSize: 14,
                             ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                'distance'.i18n(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              widget.preferedMeasurementUnit == null
+                                  ? FadingTextCycleWidget(
+                                      duration: const Duration(seconds: 3),
+                                      texts: distanceList.map((e) {
+                                        return e.key.i18n([
+                                          NumberFormat.decimalPattern(
+                                                  Platform.localeName)
+                                              .format(double.parse(e.value))
+                                        ]);
+                                      }).toList())
+                                  : Text(widget.preferedMeasurementUnit
+                                      .toString()
+                                      .split('.')
+                                      .last
+                                      .i18n([
+                                      NumberFormat.decimalPattern(
+                                              Platform.localeName)
+                                          .format(double.parse(distanceList
+                                              .where((element) =>
+                                                  element.key ==
+                                                  widget.preferedMeasurementUnit
+                                                      .toString()
+                                                      .split('.')
+                                                      .last)
+                                              .first
+                                              .value))
+                                    ])),
+                            ],
                           ),
                           const SizedBox(height: 8),
                           Text(

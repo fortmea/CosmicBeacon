@@ -75,3 +75,4 @@ google-services.json
 GoogleService-Info.plist
 cosmic_beacon/lib/data/firebase/firebase_options.dart
 cosmic_beacon/ios/firebase_app_id_file.json
+cosmic_beacon.zip

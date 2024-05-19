@@ -1,3 +1,5 @@
+enum MeasurementUnits{miles, kilometers, astronomical, lunar}
+
 class AsteroidData {
   final String id;
   final String name;

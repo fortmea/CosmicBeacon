@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:cosmic_beacon/extras/utils.dart';
 import 'package:cosmic_beacon/models/asteroid_data.dart';

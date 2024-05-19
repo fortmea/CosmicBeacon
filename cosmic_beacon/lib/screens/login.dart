@@ -33,11 +33,12 @@ class _LoginState extends State<Login> {
         return null;
       }
 
-      var userCred =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      //print(userCred.user!.uid);
-      Database(uid: userCred.user!.uid).createUser();
-      return userCred;
+      return await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .then((value) {
+        Database(uid: value.user!.uid).createUser();
+        return value;
+      });
     }
 
     return Scaffold(

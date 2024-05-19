@@ -1,26 +1,30 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
+import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/extras/utils.dart';
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/provider/bookmarked_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
-import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/widgets/approach_date.dart';
 import 'package:cosmic_beacon/widgets/cycling_text.dart';
+import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 class NeoFull extends ConsumerStatefulWidget {
   final AsteroidData asteroidData;
-  var bookmarked;
-  NeoFull({
+  final bool bookmarked;
+  const NeoFull({
     super.key,
     required this.asteroidData,
     this.bookmarked = false,
@@ -32,6 +36,9 @@ class NeoFull extends ConsumerStatefulWidget {
 
 @override
 class _NeoFull extends ConsumerState<NeoFull> {
+  MeasurementUnits preferedMeasurementUnit = MeasurementUnits.kilometers;
+  WidgetsToImageController controller = WidgetsToImageController();
+
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 100), () async {
@@ -66,7 +73,129 @@ class _NeoFull extends ConsumerState<NeoFull> {
                             .updateBookmarked(!bookmark);
                       },
                     )
-                  : const SizedBox()
+                  : const SizedBox(),
+              IconButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(builder: (context, setState) {
+                          return Dialog(
+                              insetPadding: const EdgeInsets.all(16.0),
+                              backgroundColor: meuTema.scaffoldBackgroundColor,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 16.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      title: Text('preview'.i18n(),
+                                          style: const TextStyle(fontSize: 18)),
+                                      leading:
+                                          const Icon(Icons.preview_outlined),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    WidgetsToImage(
+                                        controller: controller,
+                                        child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                                color: meuTema
+                                                    .scaffoldBackgroundColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Neo(
+                                                asteroidData:
+                                                    widget.asteroidData,
+                                                isModelViewerVisible: true,
+                                                preferedMeasurementUnit:
+                                                    preferedMeasurementUnit,
+                                                onTap: () {}))),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          DropdownMenu(
+                                            label: Text(
+                                                'select-measurement'.i18n()),
+                                            initialSelection:
+                                                preferedMeasurementUnit,
+                                            onSelected: (value) {
+                                              setState(() {
+                                                preferedMeasurementUnit =
+                                                    value as MeasurementUnits;
+                                              });
+                                            },
+                                            dropdownMenuEntries: <DropdownMenuEntry<
+                                                MeasurementUnits>>[
+                                              for (var item
+                                                  in MeasurementUnits.values)
+                                                DropdownMenuEntry<
+                                                    MeasurementUnits>(
+                                                  value: item,
+                                                  label:
+                                                      ("p-${item.toString().split('.').last}")
+                                                          .i18n(),
+                                                ),
+                                            ],
+                                          )
+                                        ]),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () async {
+                                              await controller.capture().then(
+                                                (value) {
+                                                  Share.shareXFiles(
+                                                    [
+                                                      XFile.fromData(value!,
+                                                          name: 'neo-share.jpg',
+                                                          mimeType:
+                                                              'image/jpeg',
+                                                          lastModified:
+                                                              DateTime.now())
+                                                    ],
+                                                    text: 'neo-share-text'
+                                                        .i18n([
+                                                      widget.asteroidData.name
+                                                          .split("(")[1]
+                                                          .split(")")[0]
+                                                    ]),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text('share'.i18n()),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('close'.i18n()),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ));
+                        });
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.share))
             ],
             title: Text(
                 style:

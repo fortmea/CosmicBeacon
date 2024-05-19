@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Database {
   final String uid;
   Database({required this.uid});
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
-  final CollectionReference presenceCollection =
-      FirebaseFirestore.instance.collection('presence');
   Future updateUserData(List<String> ids) async {
     return await userCollection.doc(uid).update({
       'bookmarked': ids,
@@ -36,15 +35,20 @@ class Database {
     }
   }
 
+  Future deleteUser() async {
+    return await userCollection.doc(uid).delete();
+  }
+
   Future createUser() async {
-    final userDoc = await userCollection.doc(uid).get();
-    if (!userDoc.exists) {
-      await presenceCollection.doc(uid).set({
-        'isOnline': true,
-      });
-      return await userCollection.doc(uid).set({
-        'bookmarked': [],
-      });
+    if (FirebaseAuth.instance.currentUser != null) {
+      final userDoc = await userCollection.doc(uid).get();
+      if (!userDoc.exists) {
+        return await userCollection.doc(uid).set({
+          'bookmarked': [],
+        });
+      }
+    }else{
+      print('User is null');
     }
   }
 }

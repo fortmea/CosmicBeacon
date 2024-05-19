@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
 
@@ -93,10 +94,10 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print(FirebaseAuth.instance.currentUser ?? "No user logged in");
     AsteroidData asteroidData = AsteroidData.fromJson(asteroidJson);
 
     return Scaffold(
-        //appBar: AppBar(),
         body: Stack(children: [
       const ShootingStarsBackground(),
       Center(
@@ -110,42 +111,42 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                         children: <Widget>[
                       Image.asset(
                         'lib/res/img/bg.jpg',
-                        width: 200,
+                        width: 200.w,
                       ),
                       const SizedBox(height: 16),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "welcome-text".i18n(),
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "welcome-text".i18n(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(height: 16),
-                              Text(
-                                "home-description".i18n(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              "home-description".i18n(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
                               ),
-                              const SizedBox(height: 16),
-                              Neo(
+                            ),
+                            const SizedBox(height: 16),
+                            Expanded(
+                                child: Row(children: [
+                              Expanded(
+                                  child: Neo(
                                 asteroidData: asteroidData,
                                 onTap: () {},
                                 isModelViewerVisible: true,
-                              )
-                            ],
-                          ),
+                              ))
+                            ]))
+                          ],
                         ),
-                      )
+                      ),
                     ]).animate().fade(
                         curve: Curves.easeIn,
                         duration: const Duration(milliseconds: 500))),
@@ -158,20 +159,22 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                         Navigator.of(context).pushReplacementNamed('/setup');
                       },
                       child: GlassContainer(
-                          width: 100,
-                          height: 50,
+                          width: 100.w,
+                          height: 30.h,
                           borderRadius: BorderRadius.circular(16),
                           blur: 10,
-                          child: Center(
-                            child: Text(
-                              "home-button".i18n(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )),
+                          child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Center(
+                                child: Text(
+                                  "home-button".i18n(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ))),
                     ),
                   ],
                 ),

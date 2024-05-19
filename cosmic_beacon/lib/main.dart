@@ -12,6 +12,7 @@ import 'package:cosmic_beacon/screens/login.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
 import 'package:cosmic_beacon/screens/setup.dart';
 import 'package:cosmic_beacon/screens/start.dart';
+import 'package:cosmic_beacon/screens/user_settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -71,6 +72,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   void listenToUserDataChanges() {
     final userId = FirebaseAuth.instance.currentUser?.uid;
+
     if (userId == null) {
       return;
     }
@@ -86,9 +88,12 @@ class _MyAppState extends ConsumerState<MyApp> {
         final data = snapshot.exists;
 
         if (!data) {
-          FirebaseAuth.instance.signOut();
+          context.loaderOverlay.show();
+          FirebaseAuth.instance.signOut().then((value) {
+            Phoenix.rebirth(context);
+            context.loaderOverlay.hide();
+          });
           // Close app
-          Phoenix.rebirth(context);
         }
       });
     } catch (e) {
@@ -101,6 +106,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     periodicTimer = Timer.periodic(const Duration(seconds: 5), (t) {
       try {
         final userId = FirebaseAuth.instance.currentUser?.uid;
+
         if (userId == null) {
           userSubscription?.cancel();
         } else {
@@ -132,6 +138,13 @@ class _MyAppState extends ConsumerState<MyApp> {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
               child: MaterialApp(
+                builder: (context, child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: TextScaler.noScaling),
+                    child: child!,
+                  );
+                },
                 locale: locale,
                 onGenerateRoute: (settings) {
                   if (settings.name == '/neo_full') {
@@ -161,6 +174,12 @@ class _MyAppState extends ConsumerState<MyApp> {
                   } else if (settings.name == '/home') {
                     if (FirebaseAuth.instance.currentUser != null) {
                       return CustomPageRoute(const Home());
+                    } else {
+                      return CustomPageRoute(const Login());
+                    }
+                  } else if (settings.name == "/user_settings") {
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      return CustomPageRoute(const UserSettings());
                     } else {
                       return CustomPageRoute(const Login());
                     }
