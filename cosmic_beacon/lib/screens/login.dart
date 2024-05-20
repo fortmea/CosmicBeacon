@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
+import 'package:cosmic_beacon/data/firebase/firebase_options.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:localization/localization.dart';
@@ -18,7 +22,10 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     Future<UserCredential?> signInWithGoogle() async {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = Platform.isIOS
+          ? await GoogleSignIn(clientId: DefaultFirebaseOptions.ios.iosClientId)
+              .signIn()
+          : await GoogleSignIn().signIn();
 
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
