@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"cosmicbeacon","appId":"1:457350094201:android:da511feeddd079d8f9e3a8","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"cosmicbeacon","configurations":{"android":"1:457350094201:android:da511feeddd079d8f9e3a8","ios":"1:457350094201:ios:dc8fcbef7feead8ff9e3a8","macos":"1:457350094201:ios:dc8fcbef7feead8ff9e3a8","web":"1:457350094201:web:3a0364739b2aac66f9e3a8","windows":"1:457350094201:web:df0f206998fb3f1af9e3a8"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "cosmicbeacon",
+                    "appId": "1:457350094201:android:da511feeddd079d8f9e3a8",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "cosmicbeacon",
+                    "configurations": {
+                        "android": "1:457350094201:android:da511feeddd079d8f9e3a8",
+                        "ios": "1:457350094201:ios:dc8fcbef7feead8ff9e3a8",
+                        "macos": "1:457350094201:ios:dc8fcbef7feead8ff9e3a8",
+                        "web": "1:457350094201:web:3a0364739b2aac66f9e3a8",
+                        "windows": "1:457350094201:web:df0f206998fb3f1af9e3a8"
+                    }
+                }
+            }
+        }
+    }
+}
