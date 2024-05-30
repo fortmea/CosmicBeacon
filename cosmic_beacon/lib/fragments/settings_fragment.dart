@@ -52,7 +52,6 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
           GlassContainer(
             child: Column(
               children: [
-                
                 ListTile(
                   title: Text("home-start-text"
                       .i18n([FirebaseAuth.instance.currentUser!.displayName!])),
@@ -196,6 +195,25 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
             ),
           ),
           Expanded(child: Container()),
+          const SizedBox(height: 16),
+          GlassContainer(
+            child: ListTile(
+              title: Text('report-problem'.i18n()),
+              trailing: const Icon(Icons.bug_report_rounded),
+              onTap: () {
+                final Uri url = Uri.parse(urlReportBug);
+                launchUrl(url).onError((error, stackTrace) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('error-open-url'.i18n()),
+                    ),
+                  );
+                  return false;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (context, AsyncSnapshot<PackageInfo> snapshot) {

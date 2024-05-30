@@ -70,5 +70,6 @@
     "delete-account-text": "Você tem certeza que deseja deletar sua conta? Todos os dados serão excluidos imediatamente.\nEssa ação não pode ser desfeita.",
     "export-data": "Exportar dados do usuário",
     "export-data-text": "Essa ação permite que você exporte todos os dados associados à sua conta em formato JSON.",
-    "delete-account-hint": "Essa ação permite que você exclua sua conta e todos os dados associados a ela."
+    "delete-account-hint": "Essa ação permite que você exclua sua conta e todos os dados associados a ela.",
+    "report-problem": "Reportar um problema"
 }

@@ -71,5 +71,6 @@
     "delete-account-text": "Are you sure you want to delete your account? This action cannot be undone.\nAll your data will be deleted immediately.",
     "export-data": "Export User Data",
     "export-data-text": "This action allows you to export all your user data in a JSON file.",
-    "delete-account-hint": "This action allows you to delete your account and all associated data."
+    "delete-account-hint": "This action allows you to delete your account and all associated data.",
+    "report-problem": "Report a Problem"
 }

@@ -71,6 +71,7 @@ dependencies:
   universal_io: ^2.2.2
   widgets_to_image: ^0.0.3
   share_plus: ^9.0.0
+  google_mobile_ads: ^5.1.0
 
 dev_dependencies:
   flutter_test:

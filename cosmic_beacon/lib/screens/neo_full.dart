@@ -41,8 +41,15 @@ class _NeoFull extends ConsumerState<NeoFull> {
 
   @override
   void initState() {
+    
     Future.delayed(const Duration(milliseconds: 100), () async {
       ref.read(bookmarkedProvider.notifier).updateBookmarked(widget.bookmarked);
+      try {
+        loadAd();
+        interstitialAd?.show();
+      } catch (e) {
+        print(e);
+      }
     });
 
     super.initState();

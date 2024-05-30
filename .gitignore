@@ -79,3 +79,5 @@ cosmic_beacon.zip
 /cosmic_beacon/Runner.app (2)
 *.ipa
 cosmic_beacon/Payload.ipa
+/Runner.app (2)
+*.zip
