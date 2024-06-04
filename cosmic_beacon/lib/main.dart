@@ -28,9 +28,11 @@ import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 //teste
+
 void main() async {
   ApiKey apiKey = ApiKey();
   WidgetsFlutterBinding.ensureInitialized();
+  print("Agora vai");
   MobileAds.instance.initialize();
 
   await SystemChrome.setPreferredOrientations([
