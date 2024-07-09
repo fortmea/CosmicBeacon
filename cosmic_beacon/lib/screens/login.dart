@@ -4,11 +4,9 @@ import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
 import 'package:cosmic_beacon/data/firebase/firebase_options.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:localization/localization.dart';
-import 'package:social_login_buttons/social_login_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
