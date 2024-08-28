@@ -1,4 +1,5 @@
 import 'package:cosmic_beacon/data/constants/strings.dart';
+import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
 
   Future<void> openPrivacyPolicy() async {
     final Uri url = Uri.parse(privacyPolicy);
-    if (!await launchUrl(url)) {
+    if (!await launchUrl(url) && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('error-open-url'.i18n()),
@@ -34,7 +35,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
 
   Future<void> openTermsOfService() async {
     final Uri url = Uri.parse(termsOfService);
-    if (!await launchUrl(url)) {
+    if (!await launchUrl(url) && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('error-open-url'.i18n()),
@@ -45,10 +46,16 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32),
-      child: Column(
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Expanded(
+          child: ListFade(
+              child: SingleChildScrollView(
+                  child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: MediaQuery.of(context).padding.top,
+          ),
           GlassContainer(
             child: Column(
               children: [
@@ -82,6 +89,13 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                   onTap: () {
                     Navigator.of(context).pushNamed('/user_settings');
                   },
+                  onLongPress: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('user-settings-hint'.i18n()),
+                      ),
+                    );
+                  },
                 ),
                 Row(children: [
                   Expanded(
@@ -98,6 +112,13 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                 ListTile(
                   trailing: const Icon(Icons.language_rounded),
                   title: Text("set-language".i18n()),
+                  onLongPress: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('set-language-hint'.i18n()),
+                      ),
+                    );
+                  },
                   onTap: () {
                     setState(() {
                       showDropdown = !showDropdown;
@@ -137,6 +158,13 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
           const SizedBox(height: 16),
           GlassContainer(
             child: ListTile(
+              onLongPress: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('privacy-policy-hint'.i18n()),
+                  ),
+                );
+              },
               onTap: () {
                 openPrivacyPolicy();
               },
@@ -149,6 +177,13 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
           const SizedBox(height: 16),
           GlassContainer(
             child: ListTile(
+              onLongPress: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('terms-of-service-hint'.i18n()),
+                  ),
+                );
+              },
               onTap: () {
                 openTermsOfService();
               },
@@ -160,7 +195,15 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
           ),
           const SizedBox(height: 16),
           GlassContainer(
+            color: Colors.red.withAlpha(50),
             child: ListTile(
+              onLongPress: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('logout-hint'.i18n()),
+                  ),
+                );
+              },
               onTap: () {
                 showDialog(
                   context: context,
@@ -169,19 +212,23 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                       title: Text('confirmation'.i18n()),
                       content: Text('logout-confirmation'.i18n()),
                       actions: [
-                        TextButton(
+                        OutlinedButton(
+                          style: TextButton.styleFrom(
+                              foregroundColor: Colors.blue),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('no'.i18n()),
+                        ),
+                        OutlinedButton(
+                          style:
+                              TextButton.styleFrom(foregroundColor: Colors.red),
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
                             Phoenix.rebirth(context);
                             Navigator.of(context).pop();
                           },
                           child: Text('yes'.i18n()),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('no'.i18n()),
                         ),
                       ],
                     );
@@ -194,12 +241,18 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
               ),
             ),
           ),
-          Expanded(child: Container()),
-          const SizedBox(height: 16),
+          const SizedBox(height: 64),
           GlassContainer(
             child: ListTile(
               title: Text('report-problem'.i18n()),
               trailing: const Icon(Icons.bug_report_rounded),
+              onLongPress: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('report-problem-hint'.i18n()),
+                  ),
+                );
+              },
               onTap: () {
                 final Uri url = Uri.parse(urlReportBug);
                 launchUrl(url).onError((error, stackTrace) {
@@ -239,8 +292,11 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
               }
             },
           ),
+          SizedBox(
+            height: MediaQuery.of(context).padding.bottom + 64,
+          ),
         ],
-      ),
-    );
+      ))))
+    ]);
   }
 }

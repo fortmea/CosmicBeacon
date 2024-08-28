@@ -90,8 +90,6 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
     ]
   };
 
-  // Create an instance of AsteroidData from JSON
-
   @override
   Widget build(BuildContext context) {
     print(FirebaseAuth.instance.currentUser ?? "No user logged in");

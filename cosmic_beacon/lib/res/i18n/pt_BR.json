@@ -71,5 +71,13 @@
     "export-data": "Exportar dados do usuário",
     "export-data-text": "Essa ação permite que você exporte todos os dados associados à sua conta em formato JSON.",
     "delete-account-hint": "Essa ação permite que você exclua sua conta e todos os dados associados a ela.",
-    "report-problem": "Reportar um problema"
+    "report-problem": "Reportar um problema",
+    "user-settings-hint": "Aqui você pode alterar suas configurações de usuário.",
+    "set-language-hint": "Selecione o idioma que você deseja usar no aplicativo.",
+    "privacy-policy-hint": "Leia nossa política de privacidade.",
+    "terms-of-service-hint": "Leia nossos termos de serviço.",
+    "logout-hint": "Saia da sua conta.",
+    "report-problem-hint": "Relate um problema com o aplicativo.",
+    "search": "Pesquisar",
+    "bookmarks-cleared": "Favoritos limpos."
 }

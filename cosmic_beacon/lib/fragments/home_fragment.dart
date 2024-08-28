@@ -6,6 +6,7 @@ import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/glass_date_picker.dart';
+import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,24 +58,29 @@ class HomeFragment extends ConsumerWidget {
                 return Expanded(
                     child: Column(children: [
                   Expanded(
-                    child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Neo(
-                              asteroidData: nData[index],
-                              isModelViewerVisible: false,
-                              onTap: () {
-                                Navigator.of(context)
-                                    .push(CustomPageRoute(NeoFull(
+                    child: ListFade(
+                        child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.only(bottom: 8, top: 8),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Neo(
                                   asteroidData: nData[index],
-                                  bookmarked: lista.contains(nData[index].id),
-                                )));
-                              },
-                            ),
-                          );
-                        },
-                        itemCount: nData.length),
+                                  isModelViewerVisible: false,
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(CustomPageRoute(NeoFull(
+                                      asteroidData: nData[index],
+                                      bookmarked:
+                                          lista.contains(nData[index].id),
+                                    )));
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount: nData.length)),
                   ),
                 ]));
               }, loading: () {

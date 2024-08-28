@@ -41,12 +41,11 @@ class _NeoFull extends ConsumerState<NeoFull> {
 
   @override
   void initState() {
-    
     Future.delayed(const Duration(milliseconds: 100), () async {
       ref.read(bookmarkedProvider.notifier).updateBookmarked(widget.bookmarked);
       try {
-        loadAd();
-        interstitialAd?.show();
+        //loadAd();
+        //interstitialAd?.show();
       } catch (e) {
         print(e);
       }
@@ -337,6 +336,8 @@ class _NeoFull extends ConsumerState<NeoFull> {
                     ),
                     Expanded(
                         child: GridView.builder(
+                      clipBehavior: Clip.none,
+                      physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

@@ -43,7 +43,6 @@ class BookmarkFragment extends ConsumerWidget {
                                 child: GlassContainer(
                               child: ListTile(
                                 onTap: () {
-                                  //Create a dialog to confirm the action
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -52,19 +51,38 @@ class BookmarkFragment extends ConsumerWidget {
                                           content: Text(
                                               'clear-favorites-text'.i18n()),
                                           actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Database(uid: userData.id)
-                                                    .updateUserData([]);
-                                              },
-                                              child: Text('yes'.i18n()),
-                                            ),
-                                            TextButton(
+                                            OutlinedButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
                                               child: Text('no'.i18n()),
+                                            ),
+                                            OutlinedButton(
+                                              onPressed: () {
+                                                final partial = neoList;
+                                                Navigator.of(context).pop();
+                                                Database(uid: userData.id)
+                                                    .updateUserData([]);
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'bookmarks-cleared'
+                                                          .i18n()),
+                                                  action: SnackBarAction(
+                                                      label: "undo".i18n(),
+                                                      onPressed: () {
+                                                        Database(
+                                                                uid:
+                                                                    userData.id)
+                                                            .updateUserData(
+                                                                partial
+                                                                    .map((e) =>
+                                                                        e.id)
+                                                                    .toList());
+                                                      }),
+                                                ));
+                                              },
+                                              child: Text('yes'.i18n()),
                                             ),
                                           ],
                                         );

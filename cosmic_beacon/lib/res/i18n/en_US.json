@@ -72,5 +72,13 @@
     "export-data": "Export User Data",
     "export-data-text": "This action allows you to export all your user data in a JSON file.",
     "delete-account-hint": "This action allows you to delete your account and all associated data.",
-    "report-problem": "Report a Problem"
+    "report-problem": "Report a Problem",
+    "user-settings-hint": "Here you can change your user settings.",
+    "set-language-hint": "Select the language you want to use in the app.",
+    "privacy-policy-hint": "Read our privacy policy.",
+    "terms-of-service-hint": "Read our terms of service.",
+    "logout-hint": "Log out of your account.",
+    "report-problem-hint": "Report a problem with the app.",
+    "search": "Search",
+    "bookmarks-cleared": "Bookmarks cleared."
 }

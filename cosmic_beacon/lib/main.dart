@@ -26,12 +26,13 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:localization/localization.dart';
 import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   ApiKey apiKey = ApiKey();
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  //MobileAds.instance.initialize();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -44,6 +45,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -78,9 +86,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     if (userId == null) {
       return;
     }
-
     userSubscription?.cancel();
-
     try {
       userSubscription = FirebaseFirestore.instance
           .collection('users')

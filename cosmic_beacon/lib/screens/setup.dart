@@ -95,8 +95,6 @@ class Setup extends ConsumerWidget {
                             duration: const Duration(milliseconds: 500)),
                       ]);
                     }, error: (error, stack) {
-                      print(error.toString());
-                      print(stack.toString());
                       return Text(error.toString());
                     })
                   : const SizedBox(),

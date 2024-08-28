@@ -63,8 +63,8 @@ class _Home extends ConsumerState<Home> {
         },
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.home),
-            label: 'home'.i18n(),
+            icon: const Icon(Icons.search),
+            label: 'search'.i18n(),
           ),
           NavigationDestination(
             icon: const Icon(Icons.bookmark),

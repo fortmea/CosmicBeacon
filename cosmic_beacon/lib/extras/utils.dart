@@ -1,7 +1,7 @@
-import 'dart:io';
+
 
 import 'package:flutter/foundation.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 DateTime parseCustomDate(String dateString) {
@@ -10,6 +10,8 @@ DateTime parseCustomDate(String dateString) {
 
   return parsedDate;
 }
+
+/*
  InterstitialAd? interstitialAd;
 final adUnitId = Platform.isAndroid
     ? 'ca-app-pub-3940256099942544/1033173712'
@@ -33,3 +35,4 @@ void loadAd() {
         },
       ));
 }
+*/
