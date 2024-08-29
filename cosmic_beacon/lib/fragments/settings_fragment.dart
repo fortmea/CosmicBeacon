@@ -1,7 +1,7 @@
 import 'package:cosmic_beacon/data/constants/strings.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flag/flag.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -130,18 +130,21 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                         children: [
                           ListTile(
                             title: Text("portuguese".i18n()),
-                            trailing: const Flag.fromString('BR',
-                                height: 24, width: 24),
+                            trailing: SvgPicture.asset(
+                              'lib/res/img/br.svg',
+                              width: 18,
+                              height: 18,
+                            ),
                             onTap: () {
                               widget.setLanguage(const Locale("pt"));
                             },
                           ),
                           ListTile(
                             title: Text("english".i18n()),
-                            trailing: const Flag.fromString(
-                              'US',
-                              height: 24,
-                              width: 24,
+                            trailing: SvgPicture.asset(
+                              'lib/res/img/us.svg',
+                              width: 18,
+                              height: 18,
                             ),
                             onTap: () {
                               widget.setLanguage(const Locale("en"));

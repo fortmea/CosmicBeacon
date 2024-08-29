@@ -100,7 +100,10 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
       const ShootingStarsBackground(),
       Center(
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 32,
+              ),
               child: Column(children: [
                 const SizedBox(height: 32),
                 Expanded(
@@ -109,7 +112,10 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                         children: <Widget>[
                       Image.asset(
                         'lib/res/img/bg.jpg',
-                        width: 200.w,
+                        width: 200.h,
+                        height: MediaQuery.of(context).size.width < 600
+                            ? 200.w
+                            : null,
                       ),
                       const SizedBox(height: 16),
                       Expanded(
@@ -148,7 +154,7 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                     ]).animate().fade(
                         curve: Curves.easeIn,
                         duration: const Duration(milliseconds: 500))),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -157,7 +163,7 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                         Navigator.of(context).pushReplacementNamed('/setup');
                       },
                       child: GlassContainer(
-                          width: 100.w,
+                          width: 150.w,
                           height: 30.h,
                           borderRadius: BorderRadius.circular(16),
                           blur: 10,
@@ -176,16 +182,16 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacementNamed('/login');
                   },
                   child: Text("skip".i18n(),
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 20,
                       )),
-                )
+                ),
               ])))
     ]));
   }

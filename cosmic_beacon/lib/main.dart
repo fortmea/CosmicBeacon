@@ -1,5 +1,8 @@
 //Run with flutter run | Select-String -NotMatch "updateAcquireFence: Did not find frame." | Select-String -NotMatch "Dropping PlatformView Frame" | Select-String -NotMatch "app_time_stats" | Select-String -NotMatch "Empty SMPTE" | Select-String -NotMatch "Null anb" | Select-String -NotMatch "lockHardwareCanvas" | Select-String -NotMatch "Invalid first_paint"
-
+//debug symbols are found in build\app\intermediates\merged_native_libs
+//appbundle can be generated through flutter build appbundle --obfuscate --split-debug-info=build/symbols
+//symbols need to be sent to firebase for deobfuscation
+//upload symbols with firebase crashlytics:symbols:upload --app <appid> build/symbols
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
