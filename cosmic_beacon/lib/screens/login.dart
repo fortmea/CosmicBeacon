@@ -76,12 +76,12 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     signInWithGoogle().then((value) {
                       if (value != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           backgroundColor:
                               Theme.of(context).highlightColor.withAlpha(50),
                           content: Text("login-success".i18n(),
                               style: const TextStyle(color: Colors.white)),
-                        ));
+                        ));*/
                         Navigator.of(context).pushReplacementNamed('/home');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

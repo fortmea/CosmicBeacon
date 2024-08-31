@@ -6,6 +6,7 @@ import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
@@ -140,14 +141,19 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 16),
                             Expanded(
-                                child: Row(children: [
-                              Expanded(
-                                  child: Neo(
-                                asteroidData: asteroidData,
-                                onTap: () {},
-                                isModelViewerVisible: true,
-                              ))
-                            ]))
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                  ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: MediaQuery.of(context).size.width > 500 ? 200.w : MediaQuery.of(context).size.width.w,
+                                      ),
+                                      child: Neo(
+                                        asteroidData: asteroidData,
+                                        onTap: () {},
+                                        isModelViewerVisible: true,
+                                      ))
+                                ]))
                           ],
                         ),
                       ),
@@ -156,13 +162,32 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                         duration: const Duration(milliseconds: 500))),
                 const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      },
+                      child: GlassContainer(
+                          width: 180.w,
+                          height: 30.h,
+                          borderRadius: BorderRadius.circular(16),
+                          blur: 10,
+                          child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Center(
+                                  child: Text("skip".i18n(),
+                                      softWrap: true,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ))))),
+                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushReplacementNamed('/setup');
                       },
                       child: GlassContainer(
+                          color: Colors.green.withAlpha(50),
                           width: 150.w,
                           height: 30.h,
                           borderRadius: BorderRadius.circular(16),
@@ -170,8 +195,17 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                           child: Padding(
                               padding: const EdgeInsets.all(4),
                               child: Center(
-                                child: Text(
-                                  "home-button".i18n(),
+                                child: Text.rich(
+                                  TextSpan(
+                                      text: "home-button".i18n(),
+                                      children: const [
+                                        WidgetSpan(
+                                            child: Icon(
+                                          Icons.arrow_forward,
+                                          size: 16,
+                                          color: Colors.white,
+                                        ))
+                                      ]),
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -182,7 +216,7 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                /*const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacementNamed('/login');
@@ -191,7 +225,7 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                       style: const TextStyle(
                         fontSize: 20,
                       )),
-                ),
+                ),*/
               ])))
     ]));
   }

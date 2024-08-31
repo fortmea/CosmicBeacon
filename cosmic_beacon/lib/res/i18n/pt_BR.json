@@ -79,5 +79,6 @@
     "logout-hint": "Saia da sua conta.",
     "report-problem-hint": "Relate um problema com o aplicativo.",
     "search": "Pesquisar",
-    "bookmarks-cleared": "Favoritos limpos."
+    "bookmarks-cleared": "Favoritos limpos.",
+    "welcome-home-text": "Olá, %s!"
 }

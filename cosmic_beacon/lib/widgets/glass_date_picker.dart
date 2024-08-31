@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:universal_io/io.dart';
 
 import 'package:flutter/material.dart';
@@ -7,17 +9,24 @@ import 'package:localization/localization.dart';
 
 class GlassDateTimePicker extends StatefulWidget {
   final void Function(DateTime?) onDateTimeSelected;
-  double height = 60;
-  double blur = 10;
-  double borderRadius = 16;
+  double height;
+  double blur;
+  double borderRadius;
+  Color color;
+  IconData? actionIcon;
+  final void Function()? onAction;
+  bool clearOnAction;
 
-  GlassDateTimePicker({
-    super.key,
-    required this.onDateTimeSelected,
-    this.height = 60,
-    this.blur = 10,
-    this.borderRadius = 16,
-  });
+  GlassDateTimePicker(
+      {super.key,
+      required this.onDateTimeSelected,
+      this.height = 60,
+      this.blur = 10,
+      this.borderRadius = 16,
+      this.color = Colors.transparent,
+      this.onAction,
+      this.actionIcon,
+      this.clearOnAction = false});
 
   @override
   _GlassDateTimePickerState createState() => _GlassDateTimePickerState();
@@ -65,8 +74,25 @@ class _GlassDateTimePickerState extends State<GlassDateTimePicker> {
       height: widget.height,
       borderRadius: BorderRadius.circular(widget.borderRadius),
       blur: widget.blur,
+      color: widget.color,
       child: Row(
         children: [
+          widget.actionIcon != null && _selectedDateTime != null
+              ? IconButton(
+                      onPressed: () {
+                        widget.onAction?.call();
+                        if (widget.clearOnAction) {
+                          setState(() {
+                            _selectedDateTime = null;
+                          });
+                        }
+                      },
+                      icon: Icon(widget.actionIcon))
+                  .animate()
+                  .fadeIn(
+                      curve: Curves.easeIn,
+                      duration: const Duration(milliseconds: 100))
+              : Container(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

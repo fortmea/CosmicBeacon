@@ -42,6 +42,7 @@ class Setup extends ConsumerWidget {
               Row(children: [
                 Expanded(
                     child: GlassDateTimePicker(
+                      color: Colors.blueGrey.withAlpha(50),
                   borderRadius: 10,
                   onDateTimeSelected: (DateTime? dateTime) {
                     ref

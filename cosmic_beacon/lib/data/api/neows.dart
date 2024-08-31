@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/equatable_list.dart';
+import 'package:cosmic_beacon/models/url_singleton.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NeoApi {
-  static const String neoAPIUrl = 'https://api.nasa.gov/neo/rest/v1';
+  static String neoAPIUrl = UrlSingleton().neoAPIUrl;
 
   Future<List<AsteroidData>> getNEO(DateTime dateTime) async {
     final formattedDate =
@@ -20,7 +21,7 @@ class NeoApi {
     final cachedData = prefs.getString(formattedDate);
 
     if (cachedData != null) {
-      print(cachedData);
+      //print(cachedData);
       final Map<String, dynamic> json = jsonDecode(cachedData);
       return _parseNEOData(json);
     } else {

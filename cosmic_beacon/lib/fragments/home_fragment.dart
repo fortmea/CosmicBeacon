@@ -34,14 +34,29 @@ class HomeFragment extends ConsumerWidget {
       loading: () {},
     );
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         const SizedBox(
           height: 32,
         ),
+        Text(
+                "welcome-home-text".i18n([
+                  FirebaseAuth.instance.currentUser!.displayName!.split(" ")[0]
+                ]),
+                style: const TextStyle(fontSize: 24))
+            .animate()
+            .fadeIn(
+                curve: Curves.easeIn,
+                duration: const Duration(milliseconds: 500)),
+        const SizedBox(height: 16),
         Row(children: [
           Expanded(
               child: GlassDateTimePicker(
+            onAction: () {
+              ref.read(selectedDateProvider.notifier).updateDate(null);
+            },
+            actionIcon: Icons.clear_rounded,
+            clearOnAction: true,
             borderRadius: 10,
             onDateTimeSelected: (DateTime? dateTime) {
               ref
@@ -59,28 +74,31 @@ class HomeFragment extends ConsumerWidget {
                     child: Column(children: [
                   Expanded(
                     child: ListFade(
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.only(bottom: 8, top: 8),
-                            itemBuilder: (context, index) {
-                              return Padding(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Neo(
-                                  asteroidData: nData[index],
-                                  isModelViewerVisible: false,
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .push(CustomPageRoute(NeoFull(
+                                    const EdgeInsets.only(bottom: 8, top: 8),
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Neo(
                                       asteroidData: nData[index],
-                                      bookmarked:
-                                          lista.contains(nData[index].id),
-                                    )));
-                                  },
-                                ),
-                              );
-                            },
-                            itemCount: nData.length)),
+                                      isModelViewerVisible: false,
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(CustomPageRoute(NeoFull(
+                                          asteroidData: nData[index],
+                                          bookmarked:
+                                              lista.contains(nData[index].id),
+                                        )));
+                                      },
+                                    ),
+                                  );
+                                },
+                                itemCount: nData.length))
+                        .animate()
+                        .fadeIn(duration: const Duration(milliseconds: 250)),
                   ),
                 ]));
               }, loading: () {

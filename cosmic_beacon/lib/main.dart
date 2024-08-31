@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
+import 'package:cosmic_beacon/models/url_singleton.dart';
 import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/screens/home.dart';
 import 'package:cosmic_beacon/screens/login.dart';
@@ -34,6 +35,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   ApiKey apiKey = ApiKey();
+  UrlSingleton urlSingleton = UrlSingleton();
+
   WidgetsFlutterBinding.ensureInitialized();
   //MobileAds.instance.initialize();
 
@@ -63,6 +66,11 @@ void main() async {
   ));
   await remoteConfig.fetchAndActivate();
   apiKey.apiKey = remoteConfig.getString("api_key");
+  urlSingleton.neoAPIUrl = remoteConfig.getString("neoAPIUrl");
+  urlSingleton.privacyPolicyUrl = remoteConfig.getString("privacyPolicy");
+  urlSingleton.termsOfServiceUrl = remoteConfig.getString("termsOfService");
+  urlSingleton.reportBugUrl = remoteConfig.getString("urlReportBug");
+
   runApp(Phoenix(child: const ProviderScope(child: MyApp())));
 }
 

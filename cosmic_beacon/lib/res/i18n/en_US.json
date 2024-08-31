@@ -80,5 +80,6 @@
     "logout-hint": "Log out of your account.",
     "report-problem-hint": "Report a problem with the app.",
     "search": "Search",
-    "bookmarks-cleared": "Bookmarks cleared."
+    "bookmarks-cleared": "Bookmarks cleared.",
+    "welcome-home-text": "Hello, %s!"
 }

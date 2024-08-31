@@ -1,4 +1,5 @@
 import 'package:cosmic_beacon/data/constants/strings.dart';
+import 'package:cosmic_beacon/models/url_singleton.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,7 +24,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
   bool showDropdown = false;
 
   Future<void> openPrivacyPolicy() async {
-    final Uri url = Uri.parse(privacyPolicy);
+    final Uri url = Uri.parse(UrlSingleton().privacyPolicyUrl);
     if (!await launchUrl(url) && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -34,7 +35,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
   }
 
   Future<void> openTermsOfService() async {
-    final Uri url = Uri.parse(termsOfService);
+    final Uri url = Uri.parse(UrlSingleton().termsOfServiceUrl);
     if (!await launchUrl(url) && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -257,7 +258,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                 );
               },
               onTap: () {
-                final Uri url = Uri.parse(urlReportBug);
+                final Uri url = Uri.parse(UrlSingleton().reportBugUrl);
                 launchUrl(url).onError((error, stackTrace) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
