@@ -1,6 +1,4 @@
-import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class CustomPageRoute<T> extends PageRoute<T> {

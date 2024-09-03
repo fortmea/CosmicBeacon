@@ -2,13 +2,13 @@ import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
 import 'package:cosmic_beacon/models/equatable_list.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/provider/user_provider.dart';
-import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
+import 'package:cosmic_beacon/widgets/list_fade.dart';
 
 class BookmarkFragment extends ConsumerWidget {
   const BookmarkFragment({super.key});
@@ -98,7 +98,13 @@ class BookmarkFragment extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                         Expanded(
-                            child: ListView.builder(
+                            child: ListFade(
+                                child: ListView.builder(
+                          padding: EdgeInsets.only(
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom + 16,
+                              top: MediaQuery.of(context).padding.top + 16),
+                          physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             final asteroidData = neoList[index];
                             return Padding(
@@ -147,11 +153,17 @@ class BookmarkFragment extends ConsumerWidget {
                                 ));
                           },
                           itemCount: neoList.length,
-                        ))
+                        ))),
                       ]));
                     },
                     loading: () => const CircularProgressIndicator(),
-                    error: (error, stack) => Text('Error: $error'),
+                    error: (error, stack) {
+                      FirebaseCrashlytics.instance.recordError(
+                        error,
+                        stack,
+                      );
+                      return Text('Error: $error');
+                    },
                   );
                 } else {
                   return Text(

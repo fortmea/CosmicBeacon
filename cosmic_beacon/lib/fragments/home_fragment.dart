@@ -4,7 +4,6 @@ import 'package:cosmic_beacon/provider/date_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
-import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/glass_date_picker.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';

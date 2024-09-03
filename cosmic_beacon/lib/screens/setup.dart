@@ -2,7 +2,6 @@ import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
-import 'package:cosmic_beacon/screens/login.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/glass_date_picker.dart';

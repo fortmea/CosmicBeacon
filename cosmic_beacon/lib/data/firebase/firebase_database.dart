@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cosmic_beacon/models/asteroid_data.dart';
+import 'package:cosmic_beacon/models/insight.dart';
+import 'package:cosmic_beacon/provider/ai_insight_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Database {
@@ -6,6 +9,8 @@ class Database {
   Database({required this.uid});
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
+  final CollectionReference generationRequestCollection =
+      FirebaseFirestore.instance.collection('generate');
   Future updateUserData(List<String> ids) async {
     return await userCollection.doc(uid).update({
       'bookmarked': ids,
@@ -47,8 +52,26 @@ class Database {
           'bookmarked': [],
         });
       }
-    }else{
+    } else {
       print('User is null');
     }
   }
+
+  Future createGenerationRequest(
+      InsightLocalizator insightLocalizator, AsteroidData data) async {
+    data.closeApproachDataList
+        .removeRange(1, data.closeApproachDataList.length - 1);
+
+    return await generationRequestCollection
+        .doc('${insightLocalizator.id}_${insightLocalizator.languageCode}')
+        .set({
+      "data": data.toJson().toString(),
+      "lang": insightLocalizator.languageCode,
+    });
+  }
+
+  Stream generationRequest(InsightLocalizator insightLocalizator) =>
+      generationRequestCollection
+          .doc('${insightLocalizator.id}_${insightLocalizator.languageCode}')
+          .snapshots();
 }

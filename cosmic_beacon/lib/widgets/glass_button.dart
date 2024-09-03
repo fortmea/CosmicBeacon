@@ -4,10 +4,10 @@ import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 class GlassButton extends StatefulWidget {
   final Widget child;
   final VoidCallback onPressed;
-  double blur;
-  double borderRadius;
+  final double blur;
+  final double borderRadius;
 
-  GlassButton({
+  const GlassButton({
     super.key,
     required this.child,
     required this.onPressed,

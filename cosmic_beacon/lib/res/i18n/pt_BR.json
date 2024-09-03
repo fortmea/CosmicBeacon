@@ -80,5 +80,7 @@
     "report-problem-hint": "Relate um problema com o aplicativo.",
     "search": "Pesquisar",
     "bookmarks-cleared": "Favoritos limpos.",
-    "welcome-home-text": "Olá, %s!"
+    "welcome-home-text": "Olá, %s!",
+    "generate-astro-intelligence-insight": "Gerar Insight de Inteligência Astro (IA)",
+    "astro-intelligence-insight": "Insight de Inteligência Astro (IA)"
 }

@@ -1,12 +1,8 @@
 import 'package:cosmic_beacon/models/asteroid_data.dart';
-import 'package:cosmic_beacon/models/custom_page_route.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
-import 'package:cosmic_beacon/screens/setup.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
@@ -146,7 +142,14 @@ class _StartState extends State<Start> with TickerProviderStateMixin {
                                     children: [
                                   ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        maxWidth: MediaQuery.of(context).size.width > 500 ? 200.w : MediaQuery.of(context).size.width.w,
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width >
+                                                    500
+                                                ? 200.w
+                                                : MediaQuery.of(context)
+                                                    .size
+                                                    .width
+                                                    .w,
                                       ),
                                       child: Neo(
                                         asteroidData: asteroidData,

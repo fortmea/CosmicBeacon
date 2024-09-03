@@ -81,5 +81,7 @@
     "report-problem-hint": "Report a problem with the app.",
     "search": "Search",
     "bookmarks-cleared": "Bookmarks cleared.",
-    "welcome-home-text": "Hello, %s!"
+    "welcome-home-text": "Hello, %s!",
+    "generate-astro-intelligence-insight": "Generate Astro Intelligence (AI) Insight",
+    "astro-intelligence-insight": "Astro Intelligence (AI) Insight"
 }

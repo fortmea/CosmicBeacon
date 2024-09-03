@@ -1,10 +1,7 @@
-import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -1,4 +1,4 @@
-enum MeasurementUnits{miles, kilometers, astronomical, lunar}
+enum MeasurementUnits { miles, kilometers, astronomical, lunar }
 
 class AsteroidData {
   final String id;
@@ -41,6 +41,22 @@ class AsteroidData {
             .toString()),
       },
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'absolute_magnitude_h': absoluteMagnitude,
+      'is_potentially_hazardous_asteroid': isPotentiallyHazardous,
+      'close_approach_data':
+          closeApproachDataList.map((data) => data.toJson()).toList(),
+      'estimated_diameter': {
+        'kilometers': {
+          'estimated_diameter_min': estimatedDiameterKm['min'],
+          'estimated_diameter_max': estimatedDiameterKm['max'],
+        },
+      },
+    };
   }
 }
 

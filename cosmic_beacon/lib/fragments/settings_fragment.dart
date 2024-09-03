@@ -1,4 +1,3 @@
-import 'package:cosmic_beacon/data/constants/strings.dart';
 import 'package:cosmic_beacon/models/url_singleton.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:firebase_auth/firebase_auth.dart';

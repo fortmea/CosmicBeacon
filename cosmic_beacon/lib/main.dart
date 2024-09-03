@@ -23,6 +23,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,8 +38,10 @@ void main() async {
   ApiKey apiKey = ApiKey();
   UrlSingleton urlSingleton = UrlSingleton();
 
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   //MobileAds.instance.initialize();
+
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -70,7 +73,7 @@ void main() async {
   urlSingleton.privacyPolicyUrl = remoteConfig.getString("privacyPolicy");
   urlSingleton.termsOfServiceUrl = remoteConfig.getString("termsOfService");
   urlSingleton.reportBugUrl = remoteConfig.getString("urlReportBug");
-
+  FlutterNativeSplash.remove();
   runApp(Phoenix(child: const ProviderScope(child: MyApp())));
 }
 

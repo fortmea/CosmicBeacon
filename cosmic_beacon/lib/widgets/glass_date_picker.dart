@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:universal_io/io.dart';
 
@@ -9,13 +8,13 @@ import 'package:localization/localization.dart';
 
 class GlassDateTimePicker extends StatefulWidget {
   final void Function(DateTime?) onDateTimeSelected;
-  double height;
-  double blur;
-  double borderRadius;
-  Color color;
-  IconData? actionIcon;
+  final double height;
+  final double blur;
+  final double borderRadius;
+  final Color color;
+  final IconData? actionIcon;
   final void Function()? onAction;
-  bool clearOnAction;
+  final bool clearOnAction;
 
   GlassDateTimePicker(
       {super.key,
@@ -43,7 +42,7 @@ class _GlassDateTimePickerState extends State<GlassDateTimePicker> {
       lastDate: DateTime(2100),
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
         initialTime:
