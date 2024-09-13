@@ -16,6 +16,24 @@ class UrlSingleton {
   String get privacyPolicyUrl => _privacyPolicyUrl;
   String get termsOfServiceUrl => _termsOfServiceUrl;
   String get reportBugUrl => _reportBugUrl;
+  bool _testAds = false;
+  String? _adMobKey;
+  bool _activateAds = false;
+  bool get testAds => _testAds;
+  String? get adMobKey => _adMobKey;
+  bool get activateAds => _activateAds;
+
+  set testAds(bool value) {
+    _testAds = value;
+  }
+
+  set adMobKey(String? value) {
+    _adMobKey = value;
+  }
+
+  set activateAds(bool value) {
+    _activateAds = value;
+  }
 
   set neoAPIUrl(String value) {
     _neoAPIUrl = value;

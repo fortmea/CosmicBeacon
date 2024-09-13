@@ -5,6 +5,7 @@ import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
 import 'package:cosmic_beacon/widgets/glass_date_picker.dart';
+import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -41,7 +42,7 @@ class Setup extends ConsumerWidget {
               Row(children: [
                 Expanded(
                     child: GlassDateTimePicker(
-                      color: Colors.blueGrey.withAlpha(50),
+                  color: Colors.blueGrey.withAlpha(50),
                   borderRadius: 10,
                   onDateTimeSelected: (DateTime? dateTime) {
                     ref
@@ -59,6 +60,7 @@ class Setup extends ConsumerWidget {
                       return Expanded(
                           child: Column(children: [
                         Expanded(
+                            child: listFade(
                           child: ListView.builder(
                               itemBuilder: (context, index) {
                                 return Padding(
@@ -78,7 +80,7 @@ class Setup extends ConsumerWidget {
                                 );
                               },
                               itemCount: nData.length),
-                        ),
+                        )),
                         Text("setup-end-text".i18n(),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(

@@ -33,7 +33,6 @@ android {
     namespace "tech.fortmea.cosmicbeacon.cosmic_beacon"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -75,6 +74,10 @@ android {
             ndk{
                 debugSymbolLevel 'FULL'
             }
+            shrinkResources true
+            minifyEnabled true
+            
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

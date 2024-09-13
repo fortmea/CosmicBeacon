@@ -98,7 +98,7 @@ class BookmarkFragment extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                         Expanded(
-                            child: ListFade(
+                            child: listFade(
                                 child: ListView.builder(
                           padding: EdgeInsets.only(
                               bottom:

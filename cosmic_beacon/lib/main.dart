@@ -3,7 +3,11 @@
 //appbundle can be generated through flutter build appbundle --obfuscate --split-debug-info=build/symbols
 //symbols need to be sent to firebase for deobfuscation
 //upload symbols with firebase crashlytics:symbols:upload --app <appid> build/symbols
+//compress lang files with dart run kompressor -i lib/res/i18n -o lib/res/compressed/i18n
+//compress 3d files with dart run kompressor -i lib/res/3d -o lib/res/compressed/3d
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
@@ -32,6 +36,7 @@ import 'package:localization/localization.dart';
 import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
@@ -73,12 +78,21 @@ void main() async {
   urlSingleton.privacyPolicyUrl = remoteConfig.getString("privacyPolicy");
   urlSingleton.termsOfServiceUrl = remoteConfig.getString("termsOfService");
   urlSingleton.reportBugUrl = remoteConfig.getString("urlReportBug");
+  urlSingleton.activateAds = remoteConfig.getBool("activateAds");
+  urlSingleton.adMobKey = remoteConfig.getString("adUnitId");
+  urlSingleton.testAds = remoteConfig.getBool("testAds");
   FlutterNativeSplash.remove();
-  runApp(Phoenix(child: const ProviderScope(child: MyApp())));
+  var br = await rootBundle.load('lib/res/compressed/i18n/pt_BR.json.gz');
+  var en = await rootBundle.load('lib/res/compressed/i18n/en_US.json.gz');
+  runApp(Phoenix(
+      child: ProviderScope(
+          child: MyApp(en.buffer.asUint8List(), br.buffer.asUint8List()))));
 }
 
 class MyApp extends ConsumerStatefulWidget {
-  const MyApp({super.key});
+  final Uint8List en;
+  final Uint8List pt;
+  const MyApp(this.en, this.pt, {super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -150,7 +164,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    LocalJsonLocalization.delegate.directories = ['lib/res/i18n'];
+    MapLocalization.delegate.translations = {
+      const Locale('en', 'US'):
+          json.decode(utf8.decode(gzip.decode(widget.en))),
+      const Locale('pt', 'BR'):
+          json.decode(utf8.decode(gzip.decode(widget.pt))),
+    };
     return ScreenUtilInit(
         designSize: const Size(440, 440),
         minTextAdapt: true,
@@ -217,7 +236,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
-                  LocalJsonLocalization.delegate,
+                  MapLocalization.delegate,
                 ],
                 supportedLocales: const [
                   Locale('en', 'US'),

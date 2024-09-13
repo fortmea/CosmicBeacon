@@ -12,18 +12,19 @@ import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/widgets/approach_date.dart';
 import 'package:cosmic_beacon/widgets/cycling_text.dart';
-import 'package:cosmic_beacon/widgets/glowing_border_widget.dart';
+import 'package:cosmic_beacon/widgets/glowing_widget.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
@@ -44,15 +45,30 @@ class NeoFull extends ConsumerStatefulWidget {
 class _NeoFull extends ConsumerState<NeoFull> {
   MeasurementUnits preferedMeasurementUnit = MeasurementUnits.kilometers;
   WidgetsToImageController controller = WidgetsToImageController();
+  File? file3d;
+  void load3d() async {
+    var dir = await getApplicationDocumentsDirectory();
+
+    var byteData = await rootBundle.load('lib/res/compressed/3d/a3.glb.gz');
+    var bytes = byteData.buffer.asUint8List();
+    var gzipBytes = gzip.decode(bytes);
+
+    file3d = File('${dir.path}/a3.glb');
+    file3d!.writeAsBytesSync(gzipBytes);
+    setState(() {
+      file3d = File('file://${dir.path}/a3.glb');
+    });
+  }
 
   @override
   void initState() {
+    load3d();
     Future.delayed(const Duration(milliseconds: 100), () async {
       ref.read(bookmarkedProvider.notifier).updateBookmarked(widget.bookmarked);
 
       try {
-        //loadAd();
-        //interstitialAd?.show();
+        loadAd();
+        showAd();
       } catch (e) {
         print(e);
       }
@@ -68,7 +84,7 @@ class _NeoFull extends ConsumerState<NeoFull> {
     final localeProviderRef = ref.watch(localeProvider);
     final localizator = InsightLocalizator(
         localeProviderRef.languageCode, widget.asteroidData.id);
-    final insight = ref.watch(generatedInsightProvider(localizator));
+
     final distanceList = widget
         .asteroidData.closeApproachDataList[0].missDistance
         .toJson()
@@ -221,7 +237,7 @@ class _NeoFull extends ConsumerState<NeoFull> {
                 widget.asteroidData.name.split("(")[1].split(")")[0])),
         body: Stack(children: [
           const ShootingStarsBackground(),
-          LayoutBuilder(builder:
+          listFade(child: LayoutBuilder(builder:
               (BuildContext context, BoxConstraints viewportConstraints) {
             return SingleChildScrollView(
                 child: ConstrainedBox(
@@ -237,21 +253,27 @@ class _NeoFull extends ConsumerState<NeoFull> {
                           children: [
                             SizedBox(
                                 height: 128,
-                                child: ModelViewer(
-                                  backgroundColor: Colors.transparent,
-                                  src: 'lib/res/3d/a3.glb',
-                                  alt: 'neo-alt-text'.i18n(),
-                                  shadowIntensity: 1,
-                                  disablePan: true,
-                                  disableTap: true,
-                                  cameraControls: false,
-                                  shadowSoftness: 1,
-                                  debugLogging: false,
-                                  autoRotate: true,
-                                  disableZoom: true,
-                                  touchAction: TouchAction.none,
-                                  interactionPrompt: InteractionPrompt.none,
-                                )),
+                                child: file3d != null
+                                    ? ModelViewer(
+                                        backgroundColor: Colors.transparent,
+                                        src: file3d!.path,
+                                        alt: 'neo-alt-text'.i18n(),
+                                        shadowIntensity: 1,
+                                        disablePan: true,
+                                        disableTap: true,
+                                        cameraControls: false,
+                                        shadowSoftness: 1,
+                                        debugLogging: false,
+                                        autoRotate: true,
+                                        disableZoom: true,
+                                        touchAction: TouchAction.none,
+                                        interactionPrompt:
+                                            InteractionPrompt.none,
+                                      )
+                                    : const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      )),
                             Expanded(
                               child: Row(children: [
                                 Expanded(
@@ -332,135 +354,155 @@ class _NeoFull extends ConsumerState<NeoFull> {
                                       const SizedBox(
                                         height: 16,
                                       ),
-                                      Expanded(
-                                        child: StreamBuilder(
-                                          stream: Database(uid: "0")
-                                              .generationRequest(localizator),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.error != null) {
-                                              return Text(
-                                                  snapshot.error.toString());
-                                            }
-                                            if (snapshot.hasData) {
-                                              final data = snapshot.data.data();
-                                              if (data != null) {
-                                                final insight =
-                                                    Insight.fromJson(data
-                                                        as Map<String,
-                                                            dynamic>);
-                                                return GlowingBorderWidget(
-                                                    child: GlassContainer(
-                                                        color: Colors.cyan
-                                                            .withAlpha(20),
-                                                        child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 4,
-                                                                    bottom: 32),
-                                                            child: ListTile(
-                                                                subtitle: insight
-                                                                            .output ==
-                                                                        ""
-                                                                    ? const Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                            CircularProgressIndicator()
-                                                                          ])
-                                                                    : Text(
-                                                                        insight
-                                                                            .output,
-                                                                        style:
-                                                                            const TextStyle(
+                                      StreamBuilder(
+                                        stream: Database(uid: "0")
+                                            .generationRequest(localizator),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.error != null) {
+                                            return Text(
+                                                snapshot.error.toString());
+                                          }
+                                          if (snapshot.hasData) {
+                                            final data = snapshot.data.data();
+                                            if (data != null) {
+                                              final insight = Insight.fromJson(
+                                                  data as Map<String, dynamic>);
+                                              return Expanded(
+                                                  child: GlowingWidget(
+                                                      child: GlassContainer(
+                                                          color: Colors.cyan
+                                                              .withAlpha(20),
+                                                          child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      top: 4,
+                                                                      bottom:
+                                                                          8),
+                                                              child: ListTile(
+                                                                  subtitle: Padding(
+                                                                      padding: EdgeInsets.only(bottom: 4.h),
+                                                                      child: insight.output == ""
+                                                                          ? const Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                                                              Padding(
+                                                                                padding: EdgeInsets.all(8),
+                                                                                child: CircularProgressIndicator(
+                                                                                  strokeWidth: 2,
+                                                                                  color: Colors.white,
+                                                                                ),
+                                                                              )
+                                                                            ])
+                                                                          : Column(children: [
+                                                                              const Divider(),
+                                                                              Text(
+                                                                                insight.output,
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                ),
+                                                                              ),
+                                                                              const Divider(),
+                                                                              TextButton.icon(
+                                                                                  onPressed: () {
+                                                                                    showDialog(
+                                                                                        context: context,
+                                                                                        builder: (context) {
+                                                                                          return Dialog(
+                                                                                              child: GlowingWidget(
+                                                                                                  style: PaintingStyle.fill,
+                                                                                                  opacity: .9,
+                                                                                                  child: Container(
+                                                                                                      decoration: const BoxDecoration(
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(4),
+                                                                                                      child: SingleChildScrollView(
+                                                                                                        child: Column(children: [
+                                                                                                          Container(
+                                                                                                              decoration: BoxDecoration(color: Colors.black.withOpacity(1), borderRadius: BorderRadius.circular(8), boxShadow: [
+                                                                                                                BoxShadow(color: Colors.white.withOpacity(.1), blurRadius: 8, spreadRadius: 4)
+                                                                                                              ]),
+                                                                                                              child: Padding(
+                                                                                                                padding: const EdgeInsets.all(16),
+                                                                                                                child: Column(
+                                                                                                                  children: [
+                                                                                                                    Text("disclaimer".i18n(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                                                                                                    const Divider(),
+                                                                                                                    Text("disclaimer-text".i18n())
+                                                                                                                  ],
+                                                                                                                ),
+                                                                                                              )),
+                                                                                                          Row(
+                                                                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                            children: [
+                                                                                                              TextButton(
+                                                                                                                  style: ButtonStyle(
+                                                                                                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                                                                                                    backgroundColor: MaterialStateProperty.all(Colors.black.withOpacity(1)),
+                                                                                                                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                                                                                                                  ),
+                                                                                                                  onPressed: () {
+                                                                                                                    Navigator.of(context).pop();
+                                                                                                                  },
+                                                                                                                  child: Text(
+                                                                                                                    "ok".i18n(),
+                                                                                                                  ))
+                                                                                                            ],
+                                                                                                          )
+                                                                                                        ]),
+                                                                                                      ))));
+                                                                                        });
+                                                                                  },
+                                                                                  icon: const Icon(Icons.text_snippet_outlined),
+                                                                                  label: Text("disclaimer".i18n()),
+                                                                                  style: TextButton.styleFrom(foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), backgroundColor: Colors.white.withOpacity(.1)))
+                                                                            ])),
+                                                                  title: Row(children: [
+                                                                    const Icon(Icons
+                                                                        .auto_awesome),
+                                                                    SizedBox(
+                                                                      width:
+                                                                          8.w,
+                                                                    ),
+                                                                    Text(
+                                                                      'astro-intelligence-insight'
+                                                                          .i18n(),
+                                                                      style: const TextStyle(
                                                                           fontSize:
                                                                               14,
-                                                                        ),
-                                                                      ),
-                                                                title: Row(
-                                                                    children: [
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .auto_awesome),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            8.w,
-                                                                      ),
-                                                                      Text(
-                                                                        'astro-intelligence-insight'
-                                                                            .i18n(),
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight:
-                                                                                FontWeight.w700),
-                                                                      )
-                                                                    ])))));
-                                              }
+                                                                          fontWeight:
+                                                                              FontWeight.w700),
+                                                                    )
+                                                                  ]))))));
                                             }
-                                            return GlowingBorderWidget(
-                                                child: GlassContainer(
-                                                    color: Colors.cyan
-                                                        .withAlpha(20),
-                                                    child: ListTile(
-                                                      onTap: () {
-                                                        Database(uid: "0")
-                                                            .createGenerationRequest(
-                                                                localizator,
-                                                                widget
-                                                                    .asteroidData);
-                                                      },
-                                                      leading: const Icon(
-                                                          Icons.auto_awesome),
-                                                      title: Text(
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                        "generate-astro-intelligence-insight"
-                                                            .i18n(),
+                                          }
+                                          return GlowingWidget(
+                                              child: GlassContainer(
+                                                  color:
+                                                      Colors.cyan.withAlpha(20),
+                                                  child: Center(
+                                                      child: ListTile(
+                                                    onTap: () {
+                                                      Database(uid: "0")
+                                                          .createGenerationRequest(
+                                                              localizator,
+                                                              widget
+                                                                  .asteroidData);
+                                                    },
+                                                    leading: const Icon(
+                                                        Icons.auto_awesome),
+                                                    title: Text(
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
                                                       ),
-                                                    )));
-                                          },
-                                        ),
+                                                      "generate-astro-intelligence-insight"
+                                                          .i18n(),
+                                                    ),
+                                                  ))));
+                                        },
                                       ),
                                       const SizedBox(
                                         height: 16,
                                       ),
-
-                                      /*
-                                  insight.when(data: (data) {
-                                    print(data);
-                                    return Text(
-                                      data.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    );
-                                  }, error: (error, stack) {
-                                    return Text(error.toString());
-                                  }, loading: () {
-                                    //print("loading");
-                                    return GlowingBorderWidget(
-                                        child: GlassContainer(
-                                            color: Colors.cyan.withAlpha(20),
-                                            child: ListTile(
-                                              onTap: () {
-                                                Database(uid: "0")
-                                                    .createGenerationRequest(
-                                                        localizator,
-                                                        widget.asteroidData);
-                                              },
-                                              leading: const Icon(
-                                                  Icons.auto_awesome),
-                                              title: Text(
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                                "generate-astro-intelligence-insight"
-                                                    .i18n(),
-                                              ),
-                                            )));
-                                  }),*/
                                     ],
                                   ),
                                 ),
@@ -476,19 +518,6 @@ class _NeoFull extends ConsumerState<NeoFull> {
                           thickness: 1,
                           color: Colors.grey.shade300,
                         ),
-                        /*Row(children: [
-                              Divider(),
-                              Expanded(
-                                  child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: const SizedBox(
-                                  height: 1,
-                                ),
-                              ))
-                            ]),*/
                         const SizedBox(
                           height: 16,
                         ),
@@ -505,7 +534,7 @@ class _NeoFull extends ConsumerState<NeoFull> {
                               height: 8,
                             ),
                             SizedBox(
-                                height: 400.w,
+                                height: 200.w,
                                 width: double.infinity,
                                 child: GridView.builder(
                                   shrinkWrap: true,
@@ -513,23 +542,24 @@ class _NeoFull extends ConsumerState<NeoFull> {
                                   scrollDirection: Axis.horizontal,
                                   clipBehavior: Clip.none,
                                   itemBuilder: (context, index) {
-                                    return Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: SizedBox(
-                                            height: 100,
-                                            child: GlassContainer(
-                                                child: ApproachDate(
-                                              height: 10,
-                                              width: 100,
+                                    return GlassContainer(
+                                        child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8, horizontal: 4),
+                                            child: ApproachDate(
+                                              height: 100,
+                                              width: 150,
                                               closeApproachData: data
                                                   .closeApproachDataList[index],
-                                            ))));
+                                            )));
                                   },
                                   itemCount: data.closeApproachDataList.length,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  ),
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 10,
+                                          mainAxisSpacing: 10,
+                                          mainAxisExtent: 150),
                                 ))
                           ]);
                         }, error: (error, stack) {
@@ -538,9 +568,12 @@ class _NeoFull extends ConsumerState<NeoFull> {
                           return const Center(
                               child: CircularProgressIndicator());
                         }),
+                        const SizedBox(
+                          height: 16,
+                        )
                       ]),
                     ))));
-          })
+          }))
         ]));
   }
 }

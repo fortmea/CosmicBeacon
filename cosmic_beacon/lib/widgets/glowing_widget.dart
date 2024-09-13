@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:cosmic_beacon/widgets/glowing_border_painter.dart';
+import 'package:cosmic_beacon/animation/glowing_painter.dart';
 
-class GlowingBorderWidget extends StatefulWidget {
+class GlowingWidget extends StatefulWidget {
   final Widget child;
+  final PaintingStyle style;
+  final double opacity;
 
-  const GlowingBorderWidget({super.key, required this.child});
+  const GlowingWidget(
+      {super.key,
+      required this.child,
+      this.style = PaintingStyle.stroke,
+      this.opacity = 1.0});
   @override
-  _GlowingBorderWidgetState createState() => _GlowingBorderWidgetState();
+  _GlowingWidgetState createState() => _GlowingWidgetState();
 }
 
-class _GlowingBorderWidgetState extends State<GlowingBorderWidget>
+class _GlowingWidgetState extends State<GlowingWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -37,7 +43,14 @@ class _GlowingBorderWidgetState extends State<GlowingBorderWidget>
       animation: _animation,
       builder: (context, child) {
         return CustomPaint(
-          painter: GlowingBorderPainter(_animation),
+          painter: GlowingPainter(
+              _animation,
+              [Colors.blue, Colors.deepPurple, Colors.deepOrange],
+              1,
+              1,
+              1.5,
+              opacity: widget.opacity,
+              widget.style),
           child: child,
         );
       },

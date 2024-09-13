@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmic_beacon/models/asteroid_data.dart';
-import 'package:cosmic_beacon/models/insight.dart';
 import 'package:cosmic_beacon/provider/ai_insight_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -59,8 +58,10 @@ class Database {
 
   Future createGenerationRequest(
       InsightLocalizator insightLocalizator, AsteroidData data) async {
-    data.closeApproachDataList
-        .removeRange(1, data.closeApproachDataList.length - 1);
+    if (data.closeApproachDataList.length > 1) {
+      data.closeApproachDataList
+          .removeRange(1, data.closeApproachDataList.length - 1);
+    }
 
     return await generationRequestCollection
         .doc('${insightLocalizator.id}_${insightLocalizator.languageCode}')

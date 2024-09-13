@@ -48,7 +48,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Expanded(
-          child: ListFade(
+          child: listFade(
               child: SingleChildScrollView(
                   child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -216,16 +216,12 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                       content: Text('logout-confirmation'.i18n()),
                       actions: [
                         OutlinedButton(
-                          style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                           child: Text('no'.i18n()),
                         ),
                         OutlinedButton(
-                          style:
-                              TextButton.styleFrom(foregroundColor: Colors.red),
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
                             Phoenix.rebirth(context);

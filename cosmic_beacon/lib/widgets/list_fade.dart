@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget ListFade({required Widget child}) {
+Widget listFade({required Widget child}) {
   return ShaderMask(
       shaderCallback: (Rect rect) {
         return const LinearGradient(
@@ -19,7 +19,7 @@ Widget ListFade({required Widget child}) {
       child: child);
 }
 
-Widget HorizontalListFade({required Widget child}) {
+Widget horizontalListFade({required Widget child}) {
   return ShaderMask(
       shaderCallback: (Rect rect) {
         return const LinearGradient(

@@ -1,4 +1,5 @@
 import 'package:cosmic_beacon/widgets/cycling_text.dart';
+import 'package:flutter/services.dart';
 import 'package:universal_io/io.dart';
 
 import 'package:cosmic_beacon/models/asteroid_data.dart';
@@ -7,6 +8,7 @@ import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:localization/localization.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Neo extends StatefulWidget {
   final AsteroidData asteroidData;
@@ -26,11 +28,32 @@ class Neo extends StatefulWidget {
 }
 
 class _NeoState extends State<Neo> {
+  File? file3d;
+  void load3d() async {
+    var dir = await getApplicationDocumentsDirectory();
+
+    var byteData = await rootBundle.load('lib/res/compressed/3d/a3.glb.gz');
+    var bytes = byteData.buffer.asUint8List();
+    var gzipBytes = gzip.decode(bytes);
+
+    file3d = File('${dir.path}/a3.glb');
+    file3d!.writeAsBytesSync(gzipBytes);
+    setState(() {
+      file3d = File('file://${dir.path}/a3.glb');
+    });
+  }
+
   DateTime parseCustomDate(String dateString) {
     DateFormat inputFormat = DateFormat('yyyy-MMM-dd HH:mm');
     DateTime parsedDate = inputFormat.parse(dateString);
 
     return parsedDate;
+  }
+
+  @override
+  void initState() {
+    load3d();
+    super.initState();
   }
 
   @override
@@ -55,10 +78,10 @@ class _NeoState extends State<Neo> {
                     children: [
                       SizedBox(
                         height: 128,
-                        child: widget.isModelViewerVisible
+                        child: widget.isModelViewerVisible && file3d != null
                             ? ModelViewer(
                                 backgroundColor: Colors.transparent,
-                                src: 'lib/res/3d/a3.glb',
+                                src: file3d!.path,
                                 alt: 'neo-alt-text'.i18n(),
                                 shadowIntensity: 1,
                                 disablePan: true,
@@ -71,7 +94,7 @@ class _NeoState extends State<Neo> {
                                 touchAction: TouchAction.none,
                                 interactionPrompt: InteractionPrompt.none,
                               )
-                            : Container(),
+                            : const SizedBox(),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

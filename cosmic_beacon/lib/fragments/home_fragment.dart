@@ -72,7 +72,7 @@ class HomeFragment extends ConsumerWidget {
                 return Expanded(
                     child: Column(children: [
                   Expanded(
-                    child: ListFade(
+                    child: listFade(
                             child: ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 padding:

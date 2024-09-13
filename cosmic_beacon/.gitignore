@@ -46,3 +46,5 @@ key.properties
 *.ipa
 
 /.crashlytics/
+
+lib/res/compressed/*
