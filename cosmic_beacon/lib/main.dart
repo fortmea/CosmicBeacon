@@ -5,11 +5,13 @@
 //upload symbols with firebase crashlytics:symbols:upload --app <appid> build/symbols
 //compress lang files with dart run kompressor -i lib/res/i18n -o lib/res/compressed/i18n
 //compress 3d files with dart run kompressor -i lib/res/3d -o lib/res/compressed/3d
+//size analysis can be done with flutter build appbundle --target-platform android-arm64 --analyze-size
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cosmic_beacon/data/api/imgws.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
@@ -63,6 +65,8 @@ void main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   PlatformDispatcher.instance.onError = (error, stack) {
+    print(stack);
+    print(error);
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
@@ -81,9 +85,11 @@ void main() async {
   urlSingleton.activateAds = remoteConfig.getBool("activateAds");
   urlSingleton.adMobKey = remoteConfig.getString("adUnitId");
   urlSingleton.testAds = remoteConfig.getBool("testAds");
-  FlutterNativeSplash.remove();
+  urlSingleton.imgAPIUrl = remoteConfig.getString("imgAPIUrl");
   var br = await rootBundle.load('lib/res/compressed/i18n/pt_BR.json.gz');
   var en = await rootBundle.load('lib/res/compressed/i18n/en_US.json.gz');
+  FlutterNativeSplash.remove();
+
   runApp(Phoenix(
       child: ProviderScope(
           child: MyApp(en.buffer.asUint8List(), br.buffer.asUint8List()))));

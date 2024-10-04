@@ -40,7 +40,7 @@
     "home-start-text": "Bem vindo de volta, %s!",
     "home": "Início",
     "bookmarks": "Favoritos",
-    "settings": "Configurações",
+    "settings": "Config.",
     "bookmark-no-data-text": "Você ainda não tem favoritos.",
     "bookmark-error-text": "Erro ao carregar favoritos.",
     "skip": "Pular para o login.",
@@ -85,5 +85,13 @@
     "astro-intelligence-insight": "Insight de Inteligência Astro (IA)",
     "disclaimer": "Aviso Legal",
     "disclaimer-text": "O conteúdo gerado pela IA é baseado nas informações fornecidas pelo usuário, assim como em fontes de dados externas, incluindo informações obtidas por APIs. Ele não depende de quaisquer dados específicos do usuário além do idioma preferido. Embora a IA utilize dados externos confiáveis, o conteúdo pode estar incorreto, incompleto ou desatualizado. Os usuários devem verificar as informações e não depender exclusivamente do conteúdo gerado pela IA para decisões críticas.",
-    "ok": "Ok"
+    "ok": "Ok",
+    "image": "Imagem",
+    "image-of-the-day-text": "Imagem do dia",
+    "about": "Sobre",
+    "copyright": "Copyright",
+    "more": "Mais",
+    "less": "Menos",
+    "error": "Erro",
+    "error-server-connection": "Não foi possível conectar ao servidor. Por favor, tente novamente mais tarde."
 }

@@ -1,5 +1,6 @@
 import 'package:cosmic_beacon/fragments/bookmark_fragment.dart';
 import 'package:cosmic_beacon/fragments/home_fragment.dart';
+import 'package:cosmic_beacon/fragments/image_fragment.dart';
 import 'package:cosmic_beacon/fragments/settings_fragment.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
 import 'package:cosmic_beacon/provider/locale_provider.dart';
@@ -26,6 +27,7 @@ class _Home extends ConsumerState<Home> {
     final fragments = [
       const HomeFragment(),
       const BookmarkFragment(),
+      const ImageFragment(),
       SettingsFragment(
         (Locale locale) {
           setState(() {
@@ -55,7 +57,7 @@ class _Home extends ConsumerState<Home> {
         ),
       ]),
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Colors.white.withOpacity(0.1),
         elevation: 10,
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) {
@@ -70,6 +72,8 @@ class _Home extends ConsumerState<Home> {
             icon: const Icon(Icons.bookmark),
             label: 'bookmarks'.i18n(),
           ),
+          NavigationDestination(
+              icon: const Icon(Icons.image), label: 'image'.i18n()),
           NavigationDestination(
             icon: const Icon(Icons.settings),
             label: 'settings'.i18n(),
