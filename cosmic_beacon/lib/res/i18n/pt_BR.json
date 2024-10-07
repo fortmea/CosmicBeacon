@@ -93,5 +93,7 @@
     "more": "Mais",
     "less": "Menos",
     "error": "Erro",
-    "error-server-connection": "Não foi possível conectar ao servidor. Por favor, tente novamente mais tarde."
+    "error-server-connection": "Não foi possível conectar ao servidor. Por favor, tente novamente mais tarde.",
+    "about-translation": "Sobre a tradução",
+    "about-translation-text": "Tradução gerada por IA para o idioma %s. Erros de tradução podem ocorrer."
 }

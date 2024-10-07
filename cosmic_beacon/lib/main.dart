@@ -33,8 +33,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:localization/localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -46,7 +48,7 @@ void main() async {
   UrlSingleton urlSingleton = UrlSingleton();
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  //MobileAds.instance.initialize();
+  MobileAds.instance.initialize();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -89,7 +91,8 @@ void main() async {
   var br = await rootBundle.load('lib/res/compressed/i18n/pt_BR.json.gz');
   var en = await rootBundle.load('lib/res/compressed/i18n/en_US.json.gz');
   FlutterNativeSplash.remove();
-
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString("date", DateTime.now().toIso8601String());
   runApp(Phoenix(
       child: ProviderScope(
           child: MyApp(en.buffer.asUint8List(), br.buffer.asUint8List()))));
@@ -145,7 +148,15 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   void startPeriodicCheck() {
     periodicTimer?.cancel(); // Ensure no multiple timers
-    periodicTimer = Timer.periodic(const Duration(seconds: 5), (t) {
+    periodicTimer = Timer.periodic(const Duration(seconds: 5), (t) async {
+      final prefs = await SharedPreferences.getInstance();
+      final date = DateTime.tryParse(prefs.getString('date') ?? '');
+      final now = DateTime.now();
+      final diff = now.difference(date!).inHours;
+      if (diff > 2) {
+        Phoenix.rebirth(context);
+        prefs.setString('date', DateTime.now().toIso8601String());
+      }
       try {
         final userId = FirebaseAuth.instance.currentUser?.uid;
 

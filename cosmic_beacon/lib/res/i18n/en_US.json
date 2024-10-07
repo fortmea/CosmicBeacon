@@ -94,5 +94,7 @@
     "more": "More",
     "less": "Less",
     "error": "Error",
-    "error-server-connection": "Server connection error. Please try again later."
+    "error-server-connection": "Server connection error. Please try again later.",
+    "about-translation": "About the translation",
+    "about-translation-text": "Translation generation by AI for the language %s. There can be errors in the translation."
 }

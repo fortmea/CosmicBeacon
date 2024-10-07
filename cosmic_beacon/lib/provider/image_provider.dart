@@ -9,8 +9,9 @@ final imageProvider = FutureProvider.family<SpaceImage, bool?>(
   (ref, shouldTranslate) async {
     final img =
         SpaceImage.fromJson(await ref.watch(imageApiProvider).getImage());
+
     final locale = ref.watch(localeProvider);
-    if (shouldTranslate == true) {
+    if (shouldTranslate == true && locale.languageCode != 'en') {
       final translator = OnDeviceTranslator(
           sourceLanguage: TranslateLanguage.english,
           targetLanguage: locale.toTranslateLanguage());
