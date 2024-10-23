@@ -1,6 +1,7 @@
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
 import 'package:cosmic_beacon/provider/date_provider.dart';
+import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
@@ -21,6 +22,7 @@ class HomeFragment extends ConsumerWidget {
     final user = ref.watch(userProvider);
     final selectedDate = ref.watch(selectedDateProvider);
     final provider = ref.watch(neoDataProvider(selectedDate));
+    final locale = ref.watch(localeProvider);
     var lista = [];
     user.when(
       data: (data) {
@@ -82,6 +84,7 @@ class HomeFragment extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0),
                                     child: Neo(
+                                      locale: locale,
                                       asteroidData: nData[index],
                                       isModelViewerVisible: false,
                                       onTap: () {

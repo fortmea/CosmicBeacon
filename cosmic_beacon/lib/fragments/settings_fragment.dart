@@ -1,3 +1,4 @@
+import 'package:cosmic_beacon/data/constants/locales.dart';
 import 'package:cosmic_beacon/models/url_singleton.dart';
 import 'package:cosmic_beacon/widgets/list_fade.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,6 +59,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
           ),
           GlassContainer(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
                   title: Text("home-start-text"
@@ -126,31 +128,29 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                   },
                 ),
                 showDropdown
-                    ? Column(
-                        children: [
-                          ListTile(
-                            title: Text("portuguese".i18n()),
-                            trailing: SvgPicture.asset(
-                              'lib/res/img/br.svg',
-                              width: 18,
-                              height: 18,
-                            ),
-                            onTap: () {
-                              widget.setLanguage(const Locale("pt"));
-                            },
-                          ),
-                          ListTile(
-                            title: Text("english".i18n()),
-                            trailing: SvgPicture.asset(
-                              'lib/res/img/us.svg',
-                              width: 18,
-                              height: 18,
-                            ),
-                            onTap: () {
-                              widget.setLanguage(const Locale("en"));
-                            },
-                          ),
-                        ],
+                    ? ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: supportedLocales.length,
+                        itemBuilder: (context, index) {
+                          final locale = supportedLocales[index];
+                          return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Divider(),
+                                ListTile(
+                                  title: Text(locale.languageCode.i18n()),
+                                  trailing: SvgPicture.asset(
+                                    'lib/res/img/${locale.countryCode!.toLowerCase()}.svg',
+                                    width: 18,
+                                    height: 18,
+                                  ),
+                                  onTap: () {
+                                    widget.setLanguage(locale);
+                                  },
+                                ),
+                              ]);
+                        },
                       ).animate(target: showDropdown ? 1.0 : 0.0).fade(
                         duration: const Duration(milliseconds: 250),
                         curve: Curves.easeIn)
@@ -240,7 +240,7 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
               ),
             ),
           ),
-          const SizedBox(height: 64),
+          const SizedBox(height: 32),
           GlassContainer(
             child: ListTile(
               title: Text('report-problem'.i18n()),
@@ -290,6 +290,25 @@ class _SettingsFragmentState extends ConsumerState<SettingsFragment> {
                 return const SizedBox();
               }
             },
+          ),
+          const SizedBox(height: 16),
+          GlassContainer(
+            child: ListTile(
+              title: Text('licenses'.i18n()),
+              trailing: const Icon(Icons.library_books_outlined),
+              onLongPress: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('licenses-hint'.i18n()),
+                  ),
+                );
+              },
+              onTap: () {
+                showLicensePage(
+                  context: context,
+                );
+              },
+            ),
           ),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom + 64,

@@ -15,6 +15,8 @@ DateTime parseCustomDate(String dateString) {
   return parsedDate;
 }
 
+
+
 /// Loads an interstitial ad.
 void loadAd() {
   if (UrlSingleton().activateAds && adsShown % 2 == 1) {

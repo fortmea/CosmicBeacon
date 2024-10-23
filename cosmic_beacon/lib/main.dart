@@ -1,4 +1,4 @@
-//Run with flutter run | Select-String -NotMatch "updateAcquireFence: Did not find frame." | Select-String -NotMatch "Dropping PlatformView Frame" | Select-String -NotMatch "app_time_stats" | Select-String -NotMatch "Empty SMPTE" | Select-String -NotMatch "Null anb" | Select-String -NotMatch "lockHardwareCanvas" | Select-String -NotMatch "Invalid first_paint"
+//Run with flutter run | Select-String -NotMatch "updateAcquireFence: Did not find frame." | Select-String -NotMatch "Dropping PlatformView Frame" | Select-String -NotMatch "app_time_stats" | Select-String -NotMatch "Empty SMPTE" | Select-String -NotMatch "Null anb" | Select-String -NotMatch "lockHardwareCanvas" | Select-String -NotMatch "Invalid first_paint" | Select-String -NotMatch "Access denied finding property "ro.vendor.audio.5k"
 //debug symbols are found in build\app\intermediates\merged_native_libs
 //appbundle can be generated through flutter build appbundle --obfuscate --split-debug-info=build/symbols
 //symbols need to be sent to firebase for deobfuscation
@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cosmic_beacon/data/api/imgws.dart';
+import 'package:cosmic_beacon/data/constants/locales.dart';
 import 'package:cosmic_beacon/extras/theming.dart';
 import 'package:cosmic_beacon/models/api_key_singleton.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
@@ -41,8 +41,6 @@ import 'data/firebase/firebase_options.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 void main() async {
   ApiKey apiKey = ApiKey();
   UrlSingleton urlSingleton = UrlSingleton();
@@ -56,7 +54,7 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('res/fonts/OFL.txt');
+    final license = await rootBundle.loadString('lib/res/fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
@@ -90,18 +88,34 @@ void main() async {
   urlSingleton.imgAPIUrl = remoteConfig.getString("imgAPIUrl");
   var br = await rootBundle.load('lib/res/compressed/i18n/pt_BR.json.gz');
   var en = await rootBundle.load('lib/res/compressed/i18n/en_US.json.gz');
+  var de = await rootBundle.load('lib/res/compressed/i18n/de_DE.json.gz');
+  var it = await rootBundle.load('lib/res/compressed/i18n/it_IT.json.gz');
+  var es = await rootBundle.load('lib/res/compressed/i18n/es_ES.json.gz');
+  var fr = await rootBundle.load('lib/res/compressed/i18n/fr_FR.json.gz');
   FlutterNativeSplash.remove();
   final prefs = await SharedPreferences.getInstance();
   prefs.setString("date", DateTime.now().toIso8601String());
   runApp(Phoenix(
       child: ProviderScope(
-          child: MyApp(en.buffer.asUint8List(), br.buffer.asUint8List()))));
+          child: MyApp(
+              en.buffer.asUint8List(),
+              br.buffer.asUint8List(),
+              de.buffer.asUint8List(),
+              it.buffer.asUint8List(),
+              es.buffer.asUint8List(),
+              fr.buffer.asUint8List()))));
 }
 
 class MyApp extends ConsumerStatefulWidget {
   final Uint8List en;
   final Uint8List pt;
-  const MyApp(this.en, this.pt, {super.key});
+  final Uint8List de;
+  final Uint8List es;
+  final Uint8List it;
+  final Uint8List fr;
+
+  const MyApp(this.en, this.pt, this.de, this.it, this.es, this.fr,
+      {super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -186,6 +200,14 @@ class _MyAppState extends ConsumerState<MyApp> {
           json.decode(utf8.decode(gzip.decode(widget.en))),
       const Locale('pt', 'BR'):
           json.decode(utf8.decode(gzip.decode(widget.pt))),
+      const Locale('es', 'ES'):
+          json.decode(utf8.decode(gzip.decode(widget.es))),
+      const Locale('de', 'DE'):
+          json.decode(utf8.decode(gzip.decode(widget.de))),
+      const Locale('fr', 'FR'):
+          json.decode(utf8.decode(gzip.decode(widget.fr))),
+      const Locale('it', 'IT'):
+          json.decode(utf8.decode(gzip.decode(widget.it))),
     };
     return ScreenUtilInit(
         designSize: const Size(440, 440),
@@ -255,10 +277,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   GlobalCupertinoLocalizations.delegate,
                   MapLocalization.delegate,
                 ],
-                supportedLocales: const [
-                  Locale('en', 'US'),
-                  Locale('pt', 'BR'),
-                ],
+                supportedLocales: supportedLocales,
                 debugShowCheckedModeBanner: false,
                 title: 'Cosmic Beacon',
                 theme: meuTema,

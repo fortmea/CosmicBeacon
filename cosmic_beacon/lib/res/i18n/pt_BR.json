@@ -54,8 +54,12 @@
     "error-open-url": "Erro ao abrir URL.",
     "app-version": "Versão do aplicativo: %s",
     "set-language": "Idioma",
-    "portuguese": "Português",
-    "english": "Inglês",
+    "pt": "Português",
+    "fr": "Francês",
+    "de": "Alemão",
+    "it": "Italiano",
+    "es": "Espanhol",
+    "en": "Inglês",
     "clear-favorites": "Limpar favoritos",
     "clear-favorites-text": "Você tem certeza que deseja limpar todos os favoritos?",
     "undo": "Desfazer",
@@ -95,5 +99,8 @@
     "error": "Erro",
     "error-server-connection": "Não foi possível conectar ao servidor. Por favor, tente novamente mais tarde.",
     "about-translation": "Sobre a tradução",
-    "about-translation-text": "Tradução gerada por IA para o idioma %s. Erros de tradução podem ocorrer."
+    "about-translation-text": "Tradução gerada por IA para o idioma %s. Erros de tradução podem ocorrer.",
+    "loading-translation": "Carregando tradução...",
+    "licenses": "Licenças",
+    "licenses-hint": "Mostrar licenças 3rd party"
 }

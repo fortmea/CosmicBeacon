@@ -1,6 +1,7 @@
 import 'package:cosmic_beacon/models/asteroid_data.dart';
 import 'package:cosmic_beacon/models/custom_page_route.dart';
 import 'package:cosmic_beacon/models/shooting_stars.dart';
+import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/screens/neo_full.dart';
 import 'package:cosmic_beacon/widgets/glass_button.dart';
@@ -19,7 +20,7 @@ class Setup extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(selectedDateProvider);
     final provider = ref.watch(neoDataProvider(selectedDate));
-
+    final locale = ref.watch(localeProvider);
     return Scaffold(
         //appBar: AppBar(title: const Text('Select your date of birth')),
         body: Stack(children: [
@@ -67,6 +68,7 @@ class Setup extends ConsumerWidget {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8.0),
                                   child: Neo(
+                                    locale: locale,
                                     asteroidData: nData[index],
                                     isModelViewerVisible: false,
                                     onTap: () {

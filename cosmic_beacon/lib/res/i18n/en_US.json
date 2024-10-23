@@ -55,8 +55,12 @@
     "error-open-url": "An error occurred while opening the URL.",
     "app-version": "App version: %s",
     "set-language": "Language",
-    "portuguese": "Portuguese",
-    "english": "English",
+    "pt": "Portuguese",
+    "fr": "French",
+    "de": "German",
+    "it": "Italian",
+    "es": "Spanish",
+    "en": "English",
     "clear-favorites": "Clear Bookmarks",
     "clear-favorites-text": "Are you sure you want to clear all your bookmarks?",
     "undo": "Undo",
@@ -96,5 +100,8 @@
     "error": "Error",
     "error-server-connection": "Server connection error. Please try again later.",
     "about-translation": "About the translation",
-    "about-translation-text": "Translation generation by AI for the language %s. There can be errors in the translation."
+    "about-translation-text": "Translation generation by AI for the language %s. There can be errors in the translation.",
+    "loading-translation": "Loading translation...",
+    "licenses": "Licenses",
+    "licenses-hint": "View licenses of the used libraries and tools."
 }

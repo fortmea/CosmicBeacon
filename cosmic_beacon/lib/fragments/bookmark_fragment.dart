@@ -1,5 +1,6 @@
 import 'package:cosmic_beacon/data/firebase/firebase_database.dart';
 import 'package:cosmic_beacon/models/equatable_list.dart';
+import 'package:cosmic_beacon/provider/locale_provider.dart';
 import 'package:cosmic_beacon/provider/neo_provider.dart';
 import 'package:cosmic_beacon/provider/user_provider.dart';
 import 'package:cosmic_beacon/widgets/neo.dart';
@@ -16,7 +17,7 @@ class BookmarkFragment extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userSnapshot = ref.watch(userProvider);
-
+    final locale = ref.watch(localeProvider);
     return Padding(
         padding: const EdgeInsets.only(top: 32),
         child: Column(
@@ -139,6 +140,7 @@ class BookmarkFragment extends ConsumerWidget {
                                     ],
                                   ),
                                   child: Neo(
+                                    locale: locale,
                                     preferedMeasurementUnit: null,
                                     asteroidData: asteroidData,
                                     onTap: () {

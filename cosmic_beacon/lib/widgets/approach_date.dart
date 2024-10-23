@@ -31,7 +31,7 @@ class ApproachDate extends ConsumerWidget {
         children: [
           Text(
             textAlign: TextAlign.start,
-            DateFormat.yMd(locale.countryCode).add_Hm().format(
+            DateFormat.yMd("${locale.languageCode}_${locale.countryCode!}").add_Hm().format(
                 parseCustomDate(closeApproachData.closeApproachDateFull)),
           ),
           const SizedBox(height: 8),

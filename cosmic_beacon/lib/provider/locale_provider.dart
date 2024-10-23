@@ -9,21 +9,26 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
 });
 
 class LocaleNotifier extends StateNotifier<Locale> {
-  LocaleNotifier() : super(Locale(Platform.localeName.split('_')[0])) {
+  LocaleNotifier()
+      : super(Locale(Platform.localeName.split('_')[0],
+            Platform.localeName.split('_')[1])) {
     _loadLocale();
   }
 
   Future<void> _loadLocale() async {
     final prefs = await SharedPreferences.getInstance();
-    final localeCode = prefs.getString('locale');
-    if (localeCode != null) {
-      state = Locale(localeCode);
+    final languageCode = prefs.getString('languageCode');
+    final countryCode = prefs.getString('countryCode');
+
+    if (languageCode != null) {
+      state = Locale(languageCode, countryCode);
     }
   }
 
   Future<void> setLocale(Locale newLocale) async {
     state = newLocale;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('locale', newLocale.languageCode);
+    await prefs.setString('languageCode', newLocale.languageCode);
+    await prefs.setString('countryCode', newLocale.countryCode!);
   }
 }

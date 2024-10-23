@@ -15,13 +15,14 @@ class Neo extends StatefulWidget {
   final bool isModelViewerVisible;
   final void Function() onTap;
   final MeasurementUnits? preferedMeasurementUnit;
+  final Locale locale;
   const Neo(
-      {Key? key,
+      {super.key,
       required this.asteroidData,
       required this.isModelViewerVisible,
       required this.onTap,
-      this.preferedMeasurementUnit})
-      : super(key: key);
+      this.preferedMeasurementUnit,
+      required this.locale});
 
   @override
   _NeoState createState() => _NeoState();
@@ -119,7 +120,8 @@ class _NeoState extends State<Neo> {
                           const SizedBox(height: 8),
                           Text(
                             'neo-approach-date'.i18n([
-                              DateFormat.yMd(Platform.localeName)
+                              DateFormat.yMd(widget.locale.languageCode ??
+                                      widget.locale.countryCode)
                                   .add_jm()
                                   .format(parseCustomDate(widget
                                       .asteroidData
@@ -145,7 +147,8 @@ class _NeoState extends State<Neo> {
                                       texts: distanceList.map((e) {
                                         return e.key.i18n([
                                           NumberFormat.decimalPattern(
-                                                  Platform.localeName)
+                                                  widget.locale.languageCode ??
+                                                      widget.locale.countryCode)
                                               .format(double.parse(e.value))
                                         ]);
                                       }).toList())
@@ -155,7 +158,8 @@ class _NeoState extends State<Neo> {
                                       .last
                                       .i18n([
                                       NumberFormat.decimalPattern(
-                                              Platform.localeName)
+                                              widget.locale.languageCode ??
+                                                  widget.locale.countryCode)
                                           .format(double.parse(distanceList
                                               .where((element) =>
                                                   element.key ==

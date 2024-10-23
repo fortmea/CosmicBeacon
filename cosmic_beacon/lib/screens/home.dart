@@ -19,7 +19,6 @@ class Home extends ConsumerStatefulWidget {
 
 @override
 class _Home extends ConsumerState<Home> {
-  var neoToOpen = '';
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(selectedIndexProvider);

@@ -45,6 +45,7 @@ class NeoFull extends ConsumerStatefulWidget {
 class _NeoFull extends ConsumerState<NeoFull> {
   MeasurementUnits preferedMeasurementUnit = MeasurementUnits.kilometers;
   WidgetsToImageController controller = WidgetsToImageController();
+
   File? file3d;
   void load3d() async {
     var dir = await getApplicationDocumentsDirectory();
@@ -143,6 +144,7 @@ class _NeoFull extends ConsumerState<NeoFull> {
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Neo(
+                                                locale: localeProviderRef,
                                                 asteroidData:
                                                     widget.asteroidData,
                                                 isModelViewerVisible: true,
