@@ -3,18 +3,18 @@ import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 
 extension LanguageExtension on Locale {
   TranslateLanguage toTranslateLanguage() {
-    switch (this) {
-      case Locale(languageCode: 'en'):
+    switch (languageCode) {
+      case 'en':
         return TranslateLanguage.english;
-      case Locale(languageCode: 'pt'):
+      case 'pt':
         return TranslateLanguage.portuguese;
-      case Locale(languageCode: 'es'):
+      case 'es':
         return TranslateLanguage.spanish;
-      case Locale(languageCode: 'it'):
+      case 'it':
         return TranslateLanguage.italian;
-      case Locale(languageCode: 'fr'):
+      case 'fr':
         return TranslateLanguage.french;
-      case Locale(languageCode: 'de'):
+      case 'de':
         return TranslateLanguage.german;
       default:
         return TranslateLanguage.english;

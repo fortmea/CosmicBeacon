@@ -120,8 +120,7 @@ class _NeoState extends State<Neo> {
                           const SizedBox(height: 8),
                           Text(
                             'neo-approach-date'.i18n([
-                              DateFormat.yMd(widget.locale.languageCode ??
-                                      widget.locale.countryCode)
+                              DateFormat.yMd(widget.locale.languageCode)
                                   .add_jm()
                                   .format(parseCustomDate(widget
                                       .asteroidData
@@ -147,8 +146,7 @@ class _NeoState extends State<Neo> {
                                       texts: distanceList.map((e) {
                                         return e.key.i18n([
                                           NumberFormat.decimalPattern(
-                                                  widget.locale.languageCode ??
-                                                      widget.locale.countryCode)
+                                                  widget.locale.languageCode)
                                               .format(double.parse(e.value))
                                         ]);
                                       }).toList())
@@ -158,8 +156,7 @@ class _NeoState extends State<Neo> {
                                       .last
                                       .i18n([
                                       NumberFormat.decimalPattern(
-                                              widget.locale.languageCode ??
-                                                  widget.locale.countryCode)
+                                              widget.locale.languageCode)
                                           .format(double.parse(distanceList
                                               .where((element) =>
                                                   element.key ==

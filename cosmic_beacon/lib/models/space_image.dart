@@ -8,6 +8,7 @@ class SpaceImage {
   String? title;
   String? url;
 
+
   SpaceImage(
       {this.copyright,
       this.date,
@@ -16,7 +17,7 @@ class SpaceImage {
       this.mediaType,
       this.serviceVersion,
       this.title,
-      this.url});
+      this.url,});
 
   SpaceImage.fromJson(Map<String, dynamic> json) {
     copyright = json['copyright'];

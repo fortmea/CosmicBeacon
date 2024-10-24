@@ -11,10 +11,24 @@ class ImageApi {
     final response =
         await http.get(Uri.parse('$imgAPIUrl/?api_key=${ApiKey().apiKey}'));
     if (response.statusCode == 200) {
+      print(response.body);
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load image');
     }
+  }
+
+  Future<Uri?> getRedirectUrl(String url) async {
+    http.Request req =
+        http.Request("Get", Uri.https(url.split('/')[0], url.split('/')[1]))
+          ..followRedirects = false;
+    http.Client baseClient = http.Client();
+    http.StreamedResponse response = await baseClient.send(req);
+    Uri? redirectUri = response.headers['location'] != null
+        ? Uri.parse(response.headers['location']!)
+        : null;
+
+    return redirectUri;
   }
 }
 
