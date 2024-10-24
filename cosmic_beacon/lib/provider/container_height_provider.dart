@@ -9,7 +9,6 @@ class ContainerHeightNotifier extends StateNotifier<double?> {
   ContainerHeightNotifier(super.initialState);
 
   void updateHeight(double height) {
-    print(height.toString() + "ATUALIZADO ##################");
     state = height;
   }
 }

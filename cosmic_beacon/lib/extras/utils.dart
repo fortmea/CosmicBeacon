@@ -55,8 +55,10 @@ String getHtmlString(String tweetId) {
   <html>
       
         <head>
+        <meta name="height" content="400" /></head>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <style>
+           
             *{box-sizing: border-box;margin:0px; padding:0px;}
               #container {
                         display: flex;
@@ -69,11 +71,17 @@ String getHtmlString(String tweetId) {
         </head>
 
         <body>
+
             <div id="container"></div>
+                
         </body>
 
         <script id="twitter-wjs" type="text/javascript" async defer src="https://platform.twitter.com/widgets.js" onload="createMyTweet()"></script>
+
         <script>
+        
+       
+
       function  createMyTweet() {  
 
          var twtter = window.twttr;
@@ -85,10 +93,19 @@ String getHtmlString(String tweetId) {
             theme:"dark",
           }
         ).then( function( el ) {
+setTimeout(function() {
+  
               const widget = document.getElementById('container');
+              var height = widget.offsetHeight;
+              document.querySelector('meta[name=height]').setAttribute("content", height);
               Twitter.postMessage(widget.clientHeight);
+}, 250);
+
+
+
         });
       }
+
         </script>
         
       </html>

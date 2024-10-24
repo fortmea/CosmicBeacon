@@ -1,3 +1,4 @@
+import 'dart:ffi';
 
 import 'package:cosmic_beacon/data/api/imgws.dart';
 import 'package:cosmic_beacon/extensions/language_extension.dart';
@@ -18,6 +19,8 @@ final iframeProvider = FutureProvider<WebViewController>((ref) async {
     ..setBackgroundColor(Colors.transparent)
     ..enableZoom(false)
     ..addJavaScriptChannel('Twitter', onMessageReceived: (message) {
+      print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      print(message.message);
       ref
           .read(containerHeightProvider.notifier)
           .updateHeight(double.parse(message.message));
@@ -29,6 +32,7 @@ final iframeProvider = FutureProvider<WebViewController>((ref) async {
     ));
 
   await controller.loadHtmlString(getHtmlString(postId!));
+
   return controller;
 });
 
@@ -49,18 +53,16 @@ final imageProvider = FutureProvider.family<SpaceImage, bool?>(
           targetLanguage: locale.toTranslateLanguage());
 
       img.title = await translator.translateText(img.title!);
-      //img.explanation = await translator.translateText(img.explanation!);
+      img.explanation = await translator.translateText(img.explanation!);
     }
 
     return img;
   },
 );
-// Define a provider to manage the selected date
 final showMoreProvider = StateNotifierProvider<ShowMoreNotifier, bool?>((ref) {
   return ShowMoreNotifier();
 });
 
-// Define a notifier to manage state changes for the selected date
 class ShowMoreNotifier extends StateNotifier<bool?> {
   ShowMoreNotifier() : super(false);
 
@@ -74,7 +76,6 @@ final postIdNotifierProvider =
   return PostIdNotifier();
 });
 
-// Define a notifier to manage state changes for the selected date
 class PostIdNotifier extends StateNotifier<String?> {
   PostIdNotifier() : super(null);
 

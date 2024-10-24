@@ -57,15 +57,20 @@ class ImageFragment extends ConsumerWidget {
                       ? webViewController.when(
                           data: (data) {
                             return Padding(
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: SizedBox(
                                     height: containerHeight ?? 550,
                                     child: WebViewWidget(controller: data)));
                           },
                           error: (error, stackTrace) {
-                            print(error);
-                            print(stackTrace);
-                            return const Text("deu pau");
+                            return GlassContainer(
+                              color: Colors.red.withOpacity(.2),
+                              child: ListTile(
+                                title: Text('error'.i18n()),
+                                subtitle:
+                                    Text("error-server-connection".i18n()),
+                              ),
+                            );
                           },
                           loading: () {
                             return const CircularProgressIndicator();
